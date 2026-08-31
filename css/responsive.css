@@ -25,8 +25,8 @@
   }
 
   .site-header--overlay {
-    left: 8px;
-    right: 8px;
+    left: 0;
+    right: 0;
   }
 
   .nav-toggle {
@@ -58,8 +58,8 @@
   }
 
   .hero {
-    border-radius: 22px;
-    margin: 8px;
+    border-radius: 0 0 22px 22px;
+    margin: 0;
     min-height: 640px;
   }
 

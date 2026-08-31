@@ -1,0 +1,12 @@
+[
+  { "city": "Tandil", "province": "Buenos Aires", "lat": -37.3217, "lng": -59.1332 },
+  { "city": "Azul", "province": "Buenos Aires", "lat": -36.7769, "lng": -59.8585 },
+  { "city": "Rauch", "province": "Buenos Aires", "lat": -36.7745, "lng": -59.0887 },
+  { "city": "Balcarce", "province": "Buenos Aires", "lat": -37.8462, "lng": -58.2552 },
+  { "city": "Buenos Aires", "province": "CABA", "lat": -34.6037, "lng": -58.3816 },
+  { "city": "La Plata", "province": "Buenos Aires", "lat": -34.9215, "lng": -57.9545 },
+  { "city": "Pergamino", "province": "Buenos Aires", "lat": -33.8899, "lng": -60.5736 },
+  { "city": "Rosario", "province": "Santa Fe", "lat": -32.9587, "lng": -60.6930 },
+  { "city": "Cordoba", "province": "Cordoba", "lat": -31.4201, "lng": -64.1888 },
+  { "city": "Mar del Plata", "province": "Buenos Aires", "lat": -38.0055, "lng": -57.5426 }
+]

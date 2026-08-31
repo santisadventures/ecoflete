@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Viajes disponibles - EcoFlete</title>
+    <meta name="description" content="Fletes que ya tienen un recorrido programado.">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/responsive.css">
+  </head>
+  <body data-marketplace="offeredTrips">
+    <header class="site-header">
+      <a class="brand" href="index.html"><span class="brand__mark" aria-hidden="true">EF</span><span>EcoFlete</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span>Menú</span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+        <a aria-current="page" href="viajes.html">Viajes disponibles</a>
+        <a href="cargas.html">Cargas</a>
+        <a href="index.html#como-funciona">Cómo funciona</a>
+        <a class="nav-action" data-form-link="offer" href="#">+ Publicar</a>
+      </nav>
+    </header>
+    <main class="marketplace-page">
+      <section class="marketplace-hero">
+        <span class="rule"></span>
+        <h1>Viajes disponibles</h1>
+        <p>Fletes que ya tienen un recorrido programado.</p>
+      </section>
+      <section class="marketplace-layout" aria-label="Busqueda de viajes disponibles">
+        <form class="filters" data-filters>
+          <label>Origen <input name="origin" type="search" autocomplete="off" placeholder="Tandil"></label>
+          <label>Destino <input name="destination" type="search" autocomplete="off" placeholder="Buenos Aires"></label>
+          <label>Radio
+            <select name="radius">
+              <option value="0">Ubicación exacta</option>
+              <option value="50">50 km</option>
+              <option value="100" selected>100 km</option>
+              <option value="200">200 km</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </label>
+          <label>Categoría <select name="category" data-category-filter></select></label>
+          <label>Fecha <input name="date" type="date"></label>
+          <label>Vehículo <select name="vehicle" data-vehicle-filter></select></label>
+          <label>Provincia <input name="province" type="search" placeholder="Buenos Aires"></label>
+          <label>Orden
+            <select name="sort">
+              <option value="recent">Más recientes</option>
+              <option value="date">Fecha del viaje</option>
+              <option value="nearby">Más cerca</option>
+            </select>
+          </label>
+          <button class="button button--primary" type="submit">Buscar</button>
+          <button class="button button--secondary" type="reset">Limpiar</button>
+        </form>
+        <div>
+          <div class="results-head">
+            <p data-results-count></p>
+            <a class="button button--secondary" data-form-link="request" href="#">+ Publicar una solicitud</a>
+          </div>
+          <div class="listing-grid" data-listings></div>
+          <div class="empty-state" data-empty hidden>
+            <h2>No encontramos viajes compatibles.</h2>
+            <p>Publicá una solicitud para que EcoFlete pueda buscar un recorrido compatible.</p>
+            <a class="button button--primary" data-form-link="request" href="#">Publicar una solicitud</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="js/config.js"></script>
+    <script src="js/distance.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/marketplace.js"></script>
+  </body>
+</html>

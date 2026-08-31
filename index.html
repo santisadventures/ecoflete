@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EcoFlete - Aprovechá el viaje</title>
+    <meta name="description" content="Encontrá viajes disponibles o cargas que necesitan transporte. EcoFlete conecta recorridos para aprovechar mejor cada viaje.">
+    <meta property="og:title" content="EcoFlete - Aprovechá el viaje">
+    <meta property="og:description" content="Encontrá viajes disponibles o cargas que necesitan transporte.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/images/ecoflete-hero.png">
+    <link rel="canonical" href="https://example.com/ecoflete/">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/responsive.css">
+  </head>
+  <body>
+    <header class="site-header site-header--overlay">
+      <a class="brand" href="index.html" aria-label="EcoFlete inicio">
+        <span class="brand__mark" aria-hidden="true">EF</span>
+        <span>EcoFlete</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span>Menú</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+        <a href="viajes.html">Viajes disponibles</a>
+        <a href="cargas.html">Cargas</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a class="nav-action" href="#publicar">+ Publicar</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <img class="hero__image" src="assets/images/ecoflete-hero.png" alt="Camión de carga en un camino rural al amanecer">
+        <div class="hero__shade"></div>
+        <div class="hero__content">
+          <p class="eyebrow">Marketplace de fletes</p>
+          <h1>Tu flete puede estar más cerca de lo que pensás.</h1>
+          <p>Aprovechá recorridos que ya están programados. Menos kilómetros vacíos. Mejores oportunidades.</p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="viajes.html">Ver viajes disponibles</a>
+            <a class="button button--ghost" href="cargas.html">Ver cargas disponibles</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--paths" id="publicar" aria-labelledby="acciones-title">
+        <div class="section__intro">
+          <span class="rule"></span>
+          <h2 id="acciones-title">Elegís de qué lado estás hoy</h2>
+        </div>
+        <div class="path-grid">
+          <article class="path-card">
+            <span class="path-card__badge">Necesito un flete</span>
+            <h3>Encontrá viajes que ya están disponibles.</h3>
+            <p>Busca recorridos publicados por fleteros con capacidad libre y pedí que EcoFlete coordine el contacto.</p>
+            <div class="path-card__actions">
+              <a class="button button--primary" href="viajes.html">Ver viajes disponibles</a>
+              <a class="button button--secondary" data-form-link="request" href="#">+ Publicar una solicitud</a>
+            </div>
+          </article>
+          <article class="path-card path-card--blue">
+            <span class="path-card__badge">Soy fletero</span>
+            <h3>Encontrá personas que necesitan transportar una carga.</h3>
+            <p>Explorá cargas compatibles con tus recorridos y avisá tu interés sin exponer datos privados.</p>
+            <div class="path-card__actions">
+              <a class="button button--primary" href="cargas.html">Ver cargas disponibles</a>
+              <a class="button button--secondary" data-form-link="offer" href="#">+ Publicar mi viaje</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="destacados-title">
+        <div class="section__intro">
+          <span class="rule"></span>
+          <h2 id="destacados-title">Oportunidades actuales</h2>
+          <p>Ejemplos de publicaciones moderadas por EcoFlete. En producción se cargan desde la API pública sanitizada.</p>
+        </div>
+        <div class="listing-grid" data-featured-listings></div>
+        <div class="section__actions">
+          <a class="button button--primary" href="viajes.html">Ver todos los viajes</a>
+          <a class="button button--secondary" href="cargas.html">Ver cargas</a>
+        </div>
+      </section>
+
+      <section class="section section--band" id="como-funciona" aria-labelledby="funciona-title">
+        <div class="section__intro">
+          <span class="rule"></span>
+          <h2 id="funciona-title">Cómo funciona</h2>
+        </div>
+        <div class="steps">
+          <article>
+            <span>01</span>
+            <h3>Publicá</h3>
+            <p>Publicá un recorrido disponible o una carga que necesita transporte.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Encontrá</h3>
+            <p>Explorá viajes o cargas compatibles con tu recorrido.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Conectamos</h3>
+            <p>Cuando aparece una oportunidad, EcoFlete coordina el contacto.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="privacy-strip" aria-label="Privacidad">
+        <h2>Tus datos personales no se publican.</h2>
+        <p>EcoFlete muestra únicamente la información necesaria de cada recorrido o carga y coordina el contacto entre las partes.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>EcoFlete</strong>
+        <p>Conectamos cargas con kilómetros disponibles.</p>
+        <small>EcoFlete funciona como intermediario y no es el transportista de las cargas publicadas.</small>
+      </div>
+      <nav aria-label="Navegación secundaria">
+        <a href="index.html">Inicio</a>
+        <a href="viajes.html">Viajes disponibles</a>
+        <a href="cargas.html">Cargas</a>
+        <a data-form-link="offer" href="#">Ofrecer un flete</a>
+        <a data-form-link="request" href="#">Buscar un flete</a>
+        <a href="#como-funciona">Cómo funciona</a>
+      </nav>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/home.js"></script>
+  </body>
+</html>

@@ -5,8 +5,8 @@
 
 .marketplace-hero {
   margin: 0 auto;
-  max-width: 960px;
-  padding: 74px 0 36px;
+  max-width: 980px;
+  padding: 104px 0 46px;
   text-align: center;
 }
 
@@ -19,33 +19,37 @@
 .marketplace-layout {
   align-items: start;
   display: grid;
-  gap: 32px;
-  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 34px;
+  grid-template-columns: 320px minmax(0, 1fr);
   margin: 0 auto;
-  max-width: 1180px;
+  max-width: 1220px;
 }
 
 .filters {
   background: #fff;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(17, 21, 19, 0.08);
+  border-radius: 8px;
+  box-shadow: var(--soft-shadow);
   display: grid;
-  gap: 14px;
-  padding: 22px;
+  gap: 15px;
+  padding: 24px;
   position: sticky;
-  top: 102px;
+  top: 96px;
 }
 
 .filters label {
   color: var(--ink-soft);
   display: grid;
   font-size: 0.86rem;
-  font-weight: 800;
+  font-weight: 740;
   gap: 6px;
 }
 
 .filters input,
 .filters select {
+  background: #fbfaf7;
   border: 1px solid var(--line);
+  border-radius: 8px;
   color: var(--ink);
   font: inherit;
   min-height: 46px;
@@ -69,7 +73,7 @@
 
 .listing-grid {
   display: grid;
-  gap: 30px;
+  gap: 28px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0 auto;
   max-width: 1120px;
@@ -81,7 +85,9 @@
 
 .listing-card {
   background: #fff;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(17, 21, 19, 0.08);
+  border-radius: 8px;
+  box-shadow: var(--soft-shadow);
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -90,7 +96,7 @@
 
 .listing-card__image {
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, #d7dfc7, #819a5b);
+  background: #e8e6df;
   object-fit: cover;
   width: 100%;
 }
@@ -99,33 +105,37 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 0 20px 22px;
+  padding: 18px 22px 22px;
 }
 
 .listing-card__badge {
   align-self: flex-start;
-  background: var(--green);
-  color: #fff;
-  font-size: 0.74rem;
+  background: #eef2e7;
+  border: 1px solid rgba(111, 142, 55, 0.16);
+  border-radius: 999px;
+  color: var(--green-dark);
+  font-size: 0.7rem;
   font-weight: 800;
-  margin: -1px 0 18px -20px;
-  padding: 10px 18px;
+  margin: 0 0 18px;
+  padding: 8px 12px;
   text-transform: uppercase;
 }
 
 .listing-card--request .listing-card__badge {
-  background: var(--blue);
+  background: #f0efeb;
+  border-color: rgba(17, 21, 19, 0.08);
+  color: var(--blue-dark);
 }
 
 .listing-card__route {
-  color: var(--blue-dark);
+  color: var(--ink-soft);
   font-size: 0.84rem;
   font-weight: 800;
   margin: 0 0 8px;
 }
 
 .listing-card h3 {
-  font-size: 1.38rem;
+  font-size: 1.7rem;
 }
 
 .listing-card__meta {
@@ -165,7 +175,9 @@
 .empty-state,
 .error-state {
   background: #fff;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(17, 21, 19, 0.08);
+  border-radius: 8px;
+  box-shadow: var(--soft-shadow);
   padding: 34px;
   text-align: center;
 }
@@ -177,7 +189,9 @@
 
 .skeleton {
   background: #fff;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(17, 21, 19, 0.08);
+  border-radius: 8px;
+  box-shadow: var(--soft-shadow);
   min-height: 390px;
   overflow: hidden;
   position: relative;
@@ -213,7 +227,10 @@
 .detail-main,
 .detail-side {
   background: #fff;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(17, 21, 19, 0.08);
+  border-radius: 8px;
+  box-shadow: var(--soft-shadow);
+  overflow: hidden;
 }
 
 .detail-main img {
@@ -232,7 +249,7 @@
 }
 
 .detail-route {
-  color: var(--blue-dark);
+  color: var(--ink-soft);
   font-weight: 900;
   margin: 18px 0 10px;
 }

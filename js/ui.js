@@ -33,7 +33,7 @@ const EcoFleteUi = (() => {
     const config = window.ECOFLETE_CONFIG;
     if (kind === "offer") return config.OFFER_FREIGHT_FORM_URL;
     if (kind === "request") return config.REQUEST_FREIGHT_FORM_URL;
-    if (kind === "interést" && config.INTEREST_FORM_URL) {
+    if (kind === "interest" && config.INTEREST_FORM_URL) {
       const separator = config.INTEREST_FORM_URL.includes("?") ? "&" : "?";
       return `${config.INTEREST_FORM_URL}${separator}listingId=${encodeURIComponent(listingId)}`;
     }
@@ -47,13 +47,13 @@ const EcoFleteUi = (() => {
       <article class="listing-card ${isRequest ? "listing-card--request" : ""}">
         <img class="listing-card__image" src="${escapeHtml(listing.image || fallbackImage)}" alt="${escapeHtml(listing.imageAlt || listing.title)}">
         <div class="listing-card__body">
-          <span class="listing-card__badge">${isRequest ? "Busca flete" : "Ofrece flete"}</span>
+          <span class="listing-card__badge">${isRequest ? "Pedido de viaje" : "Viaje disponible"}</span>
           <p class="listing-card__route">${escapeHtml(listing.origin.city)} -> ${escapeHtml(listing.destination.city)}</p>
           <h3>${escapeHtml(listing.title)}</h3>
           <ul class="listing-card__meta">
             <li><strong>${formatDate(listing.date, listing.dateEnd)}</strong><br>${escapeHtml(listing.dateFlexibility || "Fecha definida")}</li>
             <li><strong>${escapeHtml(listing.category)}</strong><br>${escapeHtml(listing.vehicle || "Vehículo a coordinar")}</li>
-            <li><strong>${escapeHtml(listing.capacity || listing.cargo || "A coordinar")}</strong><br>Capacidad / carga</li>
+            <li><strong>${escapeHtml(listing.capacity || listing.cargo || "A coordinar")}</strong><br>${isRequest ? "Carga solicitada" : "Capacidad"}</li>
             <li><strong>${escapeHtml(listing.destination.province)}</strong><br>Destino</li>
           </ul>
           <p class="listing-card__description">${escapeHtml(listing.description)}</p>

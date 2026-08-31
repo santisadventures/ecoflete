@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <article class="detail-main">
           <img src="${EcoFleteUi.escapeHtml(listing.image || "assets/images/ecoflete-hero.png")}" alt="${EcoFleteUi.escapeHtml(listing.imageAlt || listing.title)}">
           <div class="detail-main__content">
-            <span class="listing-card__badge">${isRequest ? "Busca flete" : "Ofrece flete"}</span>
+            <span class="listing-card__badge">${isRequest ? "Pedido de viaje" : "Viaje disponible"}</span>
             <p class="detail-route">${EcoFleteUi.escapeHtml(listing.origin.city)} -> ${EcoFleteUi.escapeHtml(listing.destination.city)}</p>
             <h1>${EcoFleteUi.escapeHtml(listing.title)}</h1>
             <p>${EcoFleteUi.escapeHtml(listing.description)}</p>
@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </article>
         <aside class="detail-side">
-          <h2>${isRequest ? "Quiero hacer este flete" : "Solicitar contacto"}</h2>
-          <p>${isRequest ? "EcoFlete coordina el contacto con la persona que público la solicitud." : "Los datos personales del transportista no son públicos. EcoFlete coordina el contacto entre las partes."}</p>
-          <a class="button button--primary" data-form-link="interést" data-listing-id="${EcoFleteUi.escapeHtml(listing.id)}" href="#">${isRequest ? "Quiero hacer este flete" : "Solicitar contacto"}</a>
+          <h2>${isRequest ? "Quiero hacer este viaje" : "Solicitar contacto"}</h2>
+          <p>${isRequest ? "EcoFlete coordina el contacto con la persona que publicó la solicitud." : "Los datos personales del transportista no son públicos. EcoFlete coordina el contacto entre las partes."}</p>
+          <a class="button button--primary" data-form-link="interest" data-listing-id="${EcoFleteUi.escapeHtml(listing.id)}" href="#">${isRequest ? "Quiero hacer este viaje" : "Solicitar contacto"}</a>
         </aside>
       </section>`;
     EcoFleteUi.initFormLinks?.();

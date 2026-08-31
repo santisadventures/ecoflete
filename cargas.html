@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cargas que buscan flete - EcoFlete</title>
-    <meta name="description" content="Personas y empresas que necesitan transportar algo.">
+    <title>Solicitudes de viaje - EcoFlete</title>
+    <meta name="description" content="Pedidos publicados por personas y empresas que necesitan transportar algo.">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/marketplace.css">
@@ -16,7 +16,7 @@
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span>Menú</span></button>
       <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
         <a href="viajes.html">Viajes disponibles</a>
-        <a aria-current="page" href="cargas.html">Cargas</a>
+        <a aria-current="page" href="cargas.html">Solicitudes de viaje</a>
         <a href="index.html#como-funciona">Cómo funciona</a>
         <a class="nav-action" data-form-link="request" href="#">+ Publicar</a>
       </nav>
@@ -24,10 +24,10 @@
     <main class="marketplace-page">
       <section class="marketplace-hero">
         <span class="rule"></span>
-        <h1>Cargas que buscan flete</h1>
-        <p>Personas y empresas que necesitan transportar algo.</p>
+        <h1>Solicitudes de viaje</h1>
+        <p>Pedidos publicados por personas y empresas que necesitan transportar algo.</p>
       </section>
-      <section class="marketplace-layout" aria-label="Busqueda de cargas">
+      <section class="marketplace-layout" aria-label="Búsqueda de solicitudes de viaje">
         <form class="filters" data-filters>
           <label>Origen <input name="origin" type="search" autocomplete="off" placeholder="Balcarce"></label>
           <label>Destino <input name="destination" type="search" autocomplete="off" placeholder="La Plata"></label>
@@ -61,8 +61,8 @@
           </div>
           <div class="listing-grid" data-listings></div>
           <div class="empty-state" data-empty hidden>
-            <h2>No encontramos cargas compatibles con tu búsqueda.</h2>
-            <p>Publicá tu viaje para que EcoFlete pueda encontrar cargas compatibles.</p>
+            <h2>No encontramos solicitudes compatibles con tu búsqueda.</h2>
+            <p>Publicá tu viaje para que EcoFlete pueda encontrar pedidos compatibles.</p>
             <a class="button button--primary" data-form-link="offer" href="#">Publicar mi viaje</a>
           </div>
         </div>

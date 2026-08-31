@@ -5,12 +5,12 @@ EcoFlete es un marketplace de clasificados de fletes para aprovechar recorridos 
 Tiene dos mercados públicos separados:
 
 - `Viajes disponibles`: fletes ofrecidos por transportistas con capacidad libre.
-- `Cargas que buscan flete`: solicitudes de personas o empresas que necesitan transportar algo.
+- `Solicitudes de viaje`: solicitudes de personas o empresas que necesitan transportar algo.
 
 Acciones principales:
 
 - Ver viajes disponibles
-- Ver cargas disponibles
+- Ver pedidos de viaje
 - Ofrecer un flete
 - Buscar un flete
 

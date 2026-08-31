@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EcoFlete - Aprovechá el viaje</title>
-    <meta name="description" content="Encontrá viajes disponibles o cargas que necesitan transporte. EcoFlete conecta recorridos para aprovechar mejor cada viaje.">
+    <meta name="description" content="Encontrá viajes disponibles o pedidos de viaje. EcoFlete conecta recorridos para aprovechar mejor cada traslado.">
     <meta property="og:title" content="EcoFlete - Aprovechá el viaje">
-    <meta property="og:description" content="Encontrá viajes disponibles o cargas que necesitan transporte.">
+    <meta property="og:description" content="Encontrá viajes disponibles o pedidos de viaje.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/images/ecoflete-hero.png">
     <link rel="canonical" href="https://example.com/ecoflete/">
@@ -26,7 +26,7 @@
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
         <a href="viajes.html">Viajes disponibles</a>
-        <a href="cargas.html">Cargas</a>
+        <a href="cargas.html">Solicitudes de viaje</a>
         <a href="#como-funciona">Cómo funciona</a>
         <a class="nav-action" href="#publicar">+ Publicar</a>
       </nav>
@@ -34,7 +34,7 @@
 
     <main>
       <section class="hero">
-        <img class="hero__image" src="assets/images/ecoflete-hero.png" alt="Camión de carga en un camino rural al amanecer">
+        <img class="hero__image" src="assets/images/ecoflete-hero.png" alt="Camión en un camino rural al amanecer">
         <div class="hero__shade"></div>
         <div class="hero__content">
           <p class="eyebrow">Marketplace de fletes</p>
@@ -42,7 +42,7 @@
           <p>Aprovechá recorridos que ya están programados. Menos kilómetros vacíos. Mejores oportunidades.</p>
           <div class="hero__actions">
             <a class="button button--primary" href="viajes.html">Ver viajes disponibles</a>
-            <a class="button button--ghost" href="cargas.html">Ver cargas disponibles</a>
+            <a class="button button--ghost" href="cargas.html">Ver pedidos de viaje</a>
           </div>
         </div>
       </section>
@@ -64,10 +64,10 @@
           </article>
           <article class="path-card path-card--blue">
             <span class="path-card__badge">Soy fletero</span>
-            <h3>Encontrá personas que necesitan transportar una carga.</h3>
-            <p>Explorá cargas compatibles con tus recorridos y avisá tu interés sin exponer datos privados.</p>
+            <h3>Encontrá pedidos de viaje para tus recorridos.</h3>
+            <p>Explorá solicitudes compatibles y avisá tu interés sin exponer datos privados.</p>
             <div class="path-card__actions">
-              <a class="button button--primary" href="cargas.html">Ver cargas disponibles</a>
+              <a class="button button--primary" href="cargas.html">Ver pedidos de viaje</a>
               <a class="button button--secondary" data-form-link="offer" href="#">+ Publicar mi viaje</a>
             </div>
           </article>
@@ -78,12 +78,16 @@
         <div class="section__intro">
           <span class="rule"></span>
           <h2 id="destacados-title">Oportunidades actuales</h2>
-          <p>Ejemplos de publicaciones moderadas por EcoFlete. En producción se cargan desde la API pública sanitizada.</p>
+          <p>Elegí el tipo de oportunidad que querés ver.</p>
         </div>
-        <div class="listing-grid" data-featured-listings></div>
+        <div class="audience-switch" role="tablist" aria-label="Tipo de oportunidad">
+          <button class="audience-switch__button is-active" type="button" role="tab" aria-selected="true" data-featured-tab="producers">Para productores</button>
+          <button class="audience-switch__button" type="button" role="tab" aria-selected="false" data-featured-tab="carriers">Para fleteros</button>
+        </div>
+        <div class="listing-grid" data-featured-listings data-featured-audience="producers"></div>
         <div class="section__actions">
-          <a class="button button--primary" href="viajes.html">Ver todos los viajes</a>
-          <a class="button button--secondary" href="cargas.html">Ver cargas</a>
+          <a class="button button--primary" data-featured-link href="viajes.html">Ver viajes disponibles</a>
+          <a class="button button--secondary" href="cargas.html">Ver pedidos de viaje</a>
         </div>
       </section>
 
@@ -96,12 +100,12 @@
           <article>
             <span>01</span>
             <h3>Publicá</h3>
-            <p>Publicá un recorrido disponible o una carga que necesita transporte.</p>
+            <p>Publicá un recorrido disponible o un pedido de viaje.</p>
           </article>
           <article>
             <span>02</span>
             <h3>Encontrá</h3>
-            <p>Explorá viajes o cargas compatibles con tu recorrido.</p>
+            <p>Explorá viajes o solicitudes compatibles con tu recorrido.</p>
           </article>
           <article>
             <span>03</span>
@@ -113,20 +117,20 @@
 
       <section class="privacy-strip" aria-label="Privacidad">
         <h2>Tus datos personales no se publican.</h2>
-        <p>EcoFlete muestra únicamente la información necesaria de cada recorrido o carga y coordina el contacto entre las partes.</p>
+        <p>EcoFlete muestra únicamente la información necesaria de cada recorrido o solicitud y coordina el contacto entre las partes.</p>
       </section>
     </main>
 
     <footer class="site-footer">
       <div>
         <strong>EcoFlete</strong>
-        <p>Conectamos cargas con kilómetros disponibles.</p>
-        <small>EcoFlete funciona como intermediario y no es el transportista de las cargas publicadas.</small>
+        <p>Conectamos pedidos de viaje con kilómetros disponibles.</p>
+        <small>EcoFlete funciona como intermediario y no es el transportista de los viajes publicados.</small>
       </div>
       <nav aria-label="Navegación secundaria">
         <a href="index.html">Inicio</a>
         <a href="viajes.html">Viajes disponibles</a>
-        <a href="cargas.html">Cargas</a>
+        <a href="cargas.html">Solicitudes de viaje</a>
         <a data-form-link="offer" href="#">Ofrecer un flete</a>
         <a data-form-link="request" href="#">Buscar un flete</a>
         <a href="#como-funciona">Cómo funciona</a>

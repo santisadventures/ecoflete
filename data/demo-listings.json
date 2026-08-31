@@ -15,7 +15,7 @@
       "title": "Regreso con espacio disponible",
       "description": "Viaje programado desde Tandil hacia Buenos Aires con espacio para carga general y pallets.",
       "image": "assets/images/ecoflete-hero.png",
-      "imageAlt": "Camión de carga en ruta rural",
+      "imageAlt": "Camión en ruta rural",
       "publishedAt": "2026-08-29",
       "featured": true
     },
@@ -51,7 +51,7 @@
       "title": "Flete cerrado hacia Cordoba",
       "description": "Camión cerrado con capacidad disponible para materiales livianos o mudanza chica.",
       "image": "assets/images/ecoflete-hero.png",
-      "imageAlt": "Ruta rural con camion de carga",
+      "imageAlt": "Ruta rural con camión de carga",
       "publishedAt": "2026-08-25",
       "featured": false
     }
@@ -89,7 +89,7 @@
       "title": "Maquinaria agrícola hacia Pergamino",
       "description": "Solicitud moderada para traslado de maquinaria desde zona Rauch hacia Pergamino.",
       "image": "assets/images/ecoflete-hero.png",
-      "imageAlt": "Camino rural y transporte de carga",
+      "imageAlt": "Camino rural y transporte",
       "publishedAt": "2026-08-26",
       "featured": false
     },
@@ -105,9 +105,9 @@
       "vehicle": "Camión cerrado",
       "cargo": "Muebles y cajas",
       "title": "Mudanza chica desde Tandil",
-      "description": "Carga liviana con muebles y cajas. Se busca camion cerrado o utilitario grande.",
+      "description": "Pedido liviano con muebles y cajas. Se busca camión cerrado o utilitario grande.",
       "image": "assets/images/ecoflete-hero.png",
-      "imageAlt": "Camión de carga en camino abierto",
+      "imageAlt": "Camión en camino abierto",
       "publishedAt": "2026-08-24",
       "featured": false
     }

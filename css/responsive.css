@@ -24,12 +24,19 @@
     padding: 14px 20px;
   }
 
+  .site-header--overlay {
+    left: 8px;
+    right: 8px;
+  }
+
   .nav-toggle {
     display: inline-flex;
   }
 
   .site-nav {
-    background: rgba(247, 246, 242, 0.98);
+    background: rgba(246, 245, 241, 0.98);
+    border: 1px solid rgba(17, 21, 19, 0.08);
+    border-radius: 18px;
     box-shadow: var(--shadow);
     color: var(--ink);
     display: none;
@@ -51,6 +58,8 @@
   }
 
   .hero {
+    border-radius: 22px;
+    margin: 8px;
     min-height: 640px;
   }
 
@@ -63,7 +72,7 @@
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 3.25rem;
   }
 
   .hero__actions,
@@ -79,7 +88,13 @@
   }
 
   .section {
-    padding: 54px 20px;
+    padding: 68px 20px;
+  }
+
+  .audience-switch {
+    border-radius: 18px;
+    flex-direction: column;
+    max-width: none;
   }
 
   .path-card,

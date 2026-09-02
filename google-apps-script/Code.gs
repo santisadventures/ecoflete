@@ -40,7 +40,7 @@ const ECOFLETE = {
     DATE_UNTIL: "¿Hasta qué fecha querés mantener publicada esta disponibilidad?",
     CAPACITY: "Capacidad disponible aproximada",
     PRICE: "¿Cuánto estimás cobrar por este viaje?",
-    PHOTO: "Foto del vehículo",
+    PHOTO: "Foto lateral del vehículo",
     DETAILS: "Contanos cualquier detalle importante sobre este viaje o sobre la carga que buscás transportar",
     USUAL_ZONES: "¿Por qué zonas trabajás habitualmente?",
     MATCH_CONTACT: "¿Querés que EcoFlete te contacte cuando aparezcan oportunidades compatibles con tus viajes?",
@@ -68,6 +68,11 @@ function createFleterosForm() {
     .setCollectEmail(false)
     .setAllowResponseEdits(false)
     .setDestination(FormApp.DestinationType.SPREADSHEET, ECOFLETE.SPREADSHEET_ID);
+
+  const formsFolder = DriveApp.getFolderById("1YWl7Cng-FtOZ9fCm0HgOLXUByYQArnjK");
+  const formFile = DriveApp.getFileById(form.getId());
+  formFile.moveTo(formsFolder);
+
 
   addTusDatosSection_(form);
   addEsteViajeSection_(form);
@@ -240,7 +245,7 @@ function addPhotoUploadItem_(form) {
     if (typeof item.setFileTypes === "function") item.setFileTypes([FormApp.FileType.IMAGE]);
     if (typeof item.setMaxFiles === "function") item.setMaxFiles(1);
   } catch (error) {
-    throw new Error("Google Forms no permitió crear automáticamente la pregunta obligatoria de carga de imagen. El resto del formulario puede crearse, pero hay que agregar manualmente una pregunta obligatoria de carga de archivo llamada \"" + ECOFLETE.QUESTIONS.PHOTO + "\" y limitarla a imágenes antes de publicar el enlace.");
+    Logger.log("La pregunta de foto debe agregarse manualmente en Google Forms: " + error.message);
   }
 }
 

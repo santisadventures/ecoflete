@@ -43,6 +43,12 @@ const EcoFleteUi = (() => {
   function listingCard(listing) {
     const isRequest = listing.type === "request";
     const detailUrl = `detalle.html?id=${encodeURIComponent(listing.id)}`;
+    const priceMarkup = listing.priceEstimate ? `
+          <div class="listing-card__price" aria-label="Precio estimado">
+            <span>Precio estimado</span>
+            <strong>${formatPrice(listing.priceEstimate, listing.currency)}</strong>
+            <small>${escapeHtml(listing.priceNote || "Estimado por el transportista")}</small>
+          </div>` : "";
     return `
       <article class="listing-card ${isRequest ? "listing-card--request" : ""}">
         <img class="listing-card__image" src="${escapeHtml(listing.image || fallbackImage)}" alt="${escapeHtml(listing.imageAlt || listing.title)}">
@@ -56,10 +62,11 @@ const EcoFleteUi = (() => {
             <li><strong>${escapeHtml(listing.capacity || listing.cargo || "A coordinar")}</strong><br>${isRequest ? "Carga solicitada" : "Capacidad"}</li>
             <li><strong>${escapeHtml(listing.destination.province)}</strong><br>Destino</li>
           </ul>
+          ${priceMarkup}
           <p class="listing-card__description">${escapeHtml(listing.description)}</p>
           <div class="listing-card__footer">
             <span class="listing-card__date">${formatPublished(listing.publishedAt)}</span>
-            <a class="button button--secondary" href="${detailUrl}">${isRequest ? "Ver solicitud" : "Ver viaje"}</a>
+            <a class="button button--secondary" href="${detailUrl}">${isRequest ? "Ver solicitud" : "Me interesa este flete"}</a>
           </div>
         </div>
       </article>`;
@@ -86,6 +93,16 @@ const EcoFleteUi = (() => {
     return `Publicado ${new Intl.DateTimeFormat("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date)}`;
   }
 
+  function formatPrice(value, currency = "ARS") {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return "";
+    return new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: currency || "ARS",
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
+
   function escapeHtml(value) {
     return String(value || "").replace(/[&<>"']/g, (char) => ({
       "&": "&amp;",
@@ -99,5 +116,5 @@ const EcoFleteUi = (() => {
   initNavigation();
   document.addEventListener("DOMContentLoaded", initFormLinks);
 
-  return { initFormLinks, listingCard, skeletonCards, getFormUrl, formatDate, escapeHtml };
+  return { initFormLinks, listingCard, skeletonCards, getFormUrl, formatDate, formatPrice, escapeHtml };
 })();

@@ -16,6 +16,9 @@
       "description": "Viaje programado desde Tandil hacia Buenos Aires con espacio para carga general y pallets.",
       "image": "assets/images/ecoflete-hero.png",
       "imageAlt": "Camión en ruta rural",
+      "priceEstimate": 850000,
+      "currency": "ARS",
+      "priceNote": "Estimado por el transportista",
       "publishedAt": "2026-08-29",
       "featured": true
     },
@@ -34,6 +37,9 @@
       "description": "Recorrido con disponibilidad parcial para cargas secas, embolsadas o palletizadas.",
       "image": "assets/images/ecoflete-hero.png",
       "imageAlt": "Camión en zona agropecuaria",
+      "priceEstimate": 620000,
+      "currency": "ARS",
+      "priceNote": "Estimado por el transportista",
       "publishedAt": "2026-08-27",
       "featured": true
     },
@@ -52,6 +58,9 @@
       "description": "Camión cerrado con capacidad disponible para materiales livianos o mudanza chica.",
       "image": "assets/images/ecoflete-hero.png",
       "imageAlt": "Ruta rural con camión de carga",
+      "priceEstimate": 1100000,
+      "currency": "ARS",
+      "priceNote": "Estimado por el transportista",
       "publishedAt": "2026-08-25",
       "featured": false
     }

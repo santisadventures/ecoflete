@@ -2,6 +2,8 @@
 
 EcoFlete es un marketplace de clasificados de fletes para aprovechar recorridos que ya están programados.
 
+Versión actual del sitio: `1.1`.
+
 Tiene dos mercados públicos separados:
 
 - `Viajes disponibles`: fletes ofrecidos por transportistas con capacidad libre.
@@ -17,7 +19,7 @@ Acciones principales:
 ## Arquitectura
 
 ```text
-CUSTOMER / FREIGHT PROVIDER
+FLETERO / PRODUCTOR
         ↓
     GOOGLE FORM
         ↓
@@ -25,11 +27,15 @@ PRIVATE GOOGLE SHEET
         ↓
 RAW RESPONSE
         ↓
-ECOFLETE MANUAL EDITING
+APPS SCRIPT
         ↓
-PUBLIC STRUCTURED COLUMNS
+DEDUPLICACIÓN / CRM
         ↓
-ADMIN_STATUS = PUBLICADO
+PUBLICACIÓN PENDIENTE
+        ↓
+ECOFLETE MANUAL REVIEW
+        ↓
+ESTADO_ADMIN = ACTIVO + VISIBLE_WEB = SI
         ↓
 GOOGLE APPS SCRIPT
         ↓
@@ -43,6 +49,23 @@ ECOFLETE MARKETPLACE
 Google Forms recolecta información privada. Google Sheets funciona como base privada y panel liviano de administración. EcoFlete modera y normaliza manualmente cada publicación antes de mostrarla.
 
 El frontend solo consume campos públicos sanitizados. No debe incluir teléfonos, emails, enlaces privados, tokens ni credenciales.
+
+## Formulario de fleteros
+
+La versión 1.1 agrega el flujo `Ofrecer un flete`.
+
+Cada envío del formulario representa una nueva publicación, aunque el fletero ya exista. Apps Script normaliza el WhatsApp, busca `TELEFONO_CLAVE` en `FLETEROS`, reutiliza el `FLETERO_ID` si corresponde y siempre crea una nueva fila `EF-XXXX` en `PUBLICACIONES`.
+
+Las publicaciones nuevas quedan con:
+
+- `TIPO_PUBLICACION = OFRECE_FLETE`
+- `ESTADO_ADMIN = PENDIENTE`
+- `VISIBLE_WEB = NO`
+- `MONEDA = ARS`
+
+Después de la revisión manual, el sitio muestra solo publicaciones aprobadas, visibles y no vencidas. El precio estimado se muestra públicamente como estimación del transportista. WhatsApp, email, teléfono clave y notas internas nunca se publican.
+
+El código operativo está en `google-apps-script/Code.gs`; los pasos de instalación están en `google-apps-script/README.md`.
 
 ## Desarrollo local
 

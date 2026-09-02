@@ -158,6 +158,39 @@
   margin: 0 0 22px;
 }
 
+.listing-card__price,
+.detail-price {
+  background: #f7f8f3;
+  border: 1px solid rgba(111, 142, 55, 0.18);
+  border-radius: 8px;
+  display: grid;
+  gap: 2px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+}
+
+.listing-card__price span,
+.detail-price span {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.listing-card__price strong,
+.detail-price strong {
+  color: var(--green-dark);
+  font-size: 1.34rem;
+  line-height: 1.05;
+}
+
+.listing-card__price small,
+.detail-price small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 720;
+}
+
 .listing-card__footer {
   align-items: center;
   display: flex;

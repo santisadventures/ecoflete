@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const isRequest = listing.type === "request";
+    const priceMarkup = listing.priceEstimate ? `
+            <div class="detail-price">
+              <span>Precio estimado</span>
+              <strong>${EcoFleteUi.formatPrice(listing.priceEstimate, listing.currency)}</strong>
+              <small>${EcoFleteUi.escapeHtml(listing.priceNote || "Estimado por el transportista")}</small>
+            </div>` : "";
     document.title = `${listing.title} - EcoFlete`;
     EcoFleteApi.track("listing_opened", { id: listing.id, type: listing.type });
     mount.innerHTML = `
@@ -25,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <p class="detail-route">${EcoFleteUi.escapeHtml(listing.origin.city)} -> ${EcoFleteUi.escapeHtml(listing.destination.city)}</p>
             <h1>${EcoFleteUi.escapeHtml(listing.title)}</h1>
             <p>${EcoFleteUi.escapeHtml(listing.description)}</p>
+            ${priceMarkup}
             <ul class="detail-list">
               <li><strong>ID:</strong> ${EcoFleteUi.escapeHtml(listing.id)}</li>
               <li><strong>Fecha:</strong> ${EcoFleteUi.formatDate(listing.date, listing.dateEnd)} (${EcoFleteUi.escapeHtml(listing.dateFlexibility || "sin flexibilidad informada")})</li>

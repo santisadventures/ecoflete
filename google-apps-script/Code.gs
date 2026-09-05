@@ -44,7 +44,16 @@ const ECOFLETE = {
     DETAILS: "Contanos cualquier detalle importante sobre este viaje o sobre la carga que buscás transportar",
     USUAL_ZONES: "¿Por qué zonas trabajás habitualmente?",
     MATCH_CONTACT: "¿Querés que EcoFlete te contacte cuando aparezcan oportunidades compatibles con tus viajes?",
-    AUTHORIZATION: "Autorización para publicar"
+    AUTHORIZATION: "Autorización para publicar",
+    REQUEST_ORIGIN: "¿Desde dónde necesitás el flete?",
+    REQUEST_DESTINATION: "¿Hasta dónde necesitás el flete?",
+    REQUEST_DATE: "Fecha estimada del traslado",
+    REQUEST_FLEXIBILITY: "Días de flexibilidad",
+    REQUEST_CARGO: "¿Qué necesitás transportar?",
+    REQUEST_VEHICLE: "¿Qué tipo de transporte necesitás?",
+    REQUEST_AMOUNT: "Peso / volumen / cantidad",
+    REQUEST_BUDGET: "Presupuesto estimado para el traslado",
+    REQUEST_DETAILS: "Comentarios adicionales"
   }
 };
 
@@ -127,6 +136,315 @@ function onFleteroFormSubmit(event) {
   } finally {
     lock.releaseLock();
   }
+}
+
+
+function createProductoresForm() {
+  const form = FormApp.create("EcoFlete — Buscar un flete")
+    .setTitle("Buscá un flete en EcoFlete")
+    .setDescription(
+      "Contanos qué necesitás transportar y nosotros preparamos la publicación. " +
+      "Tus datos de contacto no se publican automáticamente."
+    )
+    .setCollectEmail(false)
+    .setAllowResponseEdits(false)
+    .setDestination(FormApp.DestinationType.SPREADSHEET, ECOFLETE.SPREADSHEET_ID);
+
+  const formsFolder = DriveApp.getFolderById("1YWl7Cng-FtOZ9fCm0HgOLXUByYQArnjK");
+  DriveApp.getFileById(form.getId()).moveTo(formsFolder);
+
+  form.addSectionHeaderItem().setTitle("TUS DATOS");
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.NAME)
+    .setRequired(true);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.WHATSAPP)
+    .setHelpText("Ejemplo: +54 9 11 1234 5678")
+    .setRequired(true);
+
+  form.addSectionHeaderItem().setTitle("DATOS DEL TRASLADO");
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_ORIGIN)
+    .setHelpText("Localidad, provincia. Ejemplo: Balcarce, Buenos Aires")
+    .setRequired(true);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_DESTINATION)
+    .setHelpText("Localidad, provincia. Ejemplo: La Plata, Buenos Aires")
+    .setRequired(true);
+
+  form.addDateItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_DATE)
+    .setRequired(true);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_FLEXIBILITY)
+    .setHelpText("Ingresá solamente la cantidad de días. Ejemplo: 2")
+    .setValidation(
+      FormApp.createTextValidation()
+        .requireNumberGreaterThanOrEqualTo(0)
+        .build()
+    )
+    .setRequired(true);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_CARGO)
+    .setHelpText("Ejemplo: Tractor agrícola")
+    .setValidation(
+      FormApp.createTextValidation()
+        .requireTextLengthLessThanOrEqualTo(100)
+        .build()
+    )
+    .setRequired(true);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_VEHICLE)
+    .setHelpText("Opcional. Ejemplo: Carretón")
+    .setRequired(false);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_AMOUNT)
+    .setHelpText("Ejemplo: 4 toneladas, 12 pallets, 20 animales")
+    .setRequired(true);
+
+  form.addTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_BUDGET)
+    .setHelpText("Ingresá el presupuesto total estimado en pesos argentinos (ARS).")
+    .setValidation(
+      FormApp.createTextValidation()
+        .requireNumberGreaterThan(0)
+        .build()
+    )
+    .setRequired(true);
+
+  form.addParagraphTextItem()
+    .setTitle(ECOFLETE.QUESTIONS.REQUEST_DETAILS)
+    .setHelpText("Opcional. Agregá cualquier dato que pueda ayudar al transportista.")
+    .setValidation(
+      FormApp.createParagraphTextValidation()
+        .requireTextLengthLessThanOrEqualTo(500)
+        .build()
+    )
+    .setRequired(false);
+
+  ScriptApp.newTrigger("onProductorFormSubmit")
+    .forForm(form)
+    .onFormSubmit()
+    .create();
+
+  Logger.log("Form productores URL: " + form.getPublishedUrl());
+  Logger.log("Editar productores: " + form.getEditUrl());
+
+  return {
+    publishedUrl: form.getPublishedUrl(),
+    editUrl: form.getEditUrl()
+  };
+}
+
+function onProductorFormSubmit(event) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+
+  try {
+    const response = parseFormResponse_(event);
+    const spreadsheet = SpreadsheetApp.openById(ECOFLETE.SPREADSHEET_ID);
+
+    ensureProducerColumns_(spreadsheet);
+    ensureRequestPublicationColumns_(spreadsheet);
+
+    const producersSheet = getRequiredSheet_(spreadsheet, ECOFLETE.SHEETS.PRODUCERS);
+    const publicationsSheet = getRequiredSheet_(spreadsheet, ECOFLETE.SHEETS.PUBLICATIONS);
+
+    const producers = getSheetTable_(producersSheet);
+    const publications = getSheetTable_(publicationsSheet);
+
+    const phoneKey = normalizeWhatsApp(response[ECOFLETE.QUESTIONS.WHATSAPP]);
+    if (!phoneKey) throw new Error("No se pudo normalizar el WhatsApp recibido.");
+
+    const existingProducer = findRecordByValue_(producers, "TELEFONO_CLAVE", phoneKey);
+
+    const producerId = existingProducer
+      ? updateProducer_(producersSheet, producers, existingProducer, response)
+      : createProducer_(producersSheet, producers, response, phoneKey);
+
+    const publicationId = nextId_(
+      publications.records,
+      "PUBLICACION_ID",
+      "EF"
+    );
+
+    createRequestPublication_(publicationsSheet, publications, {
+      publicationId,
+      producerId,
+      phoneKey,
+      response,
+      submittedAt: event && event.response
+        ? event.response.getTimestamp()
+        : new Date()
+    });
+
+  } catch (error) {
+    console.error(error.stack || error);
+    throw error;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function ensureProducerColumns_(spreadsheet) {
+  const sheet = getRequiredSheet_(spreadsheet, ECOFLETE.SHEETS.PRODUCERS);
+
+  ensureColumns_(sheet, [
+    "PRODUCTOR_ID",
+    "TELEFONO_CLAVE",
+    "NOMBRE",
+    "WHATSAPP",
+    "FECHA_ALTA",
+    "ULTIMA_ACTUALIZACION",
+    "ACTIVO"
+  ]);
+}
+
+function ensureRequestPublicationColumns_(spreadsheet) {
+  const sheet = getRequiredSheet_(spreadsheet, ECOFLETE.SHEETS.PUBLICATIONS);
+
+  ensureColumns_(sheet, [
+    "TIPO_VEHICULO",
+    "FLEXIBILIDAD_FECHA"
+  ]);
+}
+
+function ensureColumns_(sheet, requiredHeaders) {
+  let lastColumn = sheet.getLastColumn();
+
+  if (lastColumn === 0) {
+    sheet.getRange(1, 1, 1, requiredHeaders.length).setValues([requiredHeaders]);
+    return;
+  }
+
+  const headers = sheet
+    .getRange(1, 1, 1, lastColumn)
+    .getValues()[0]
+    .map(String);
+
+  requiredHeaders.forEach((header) => {
+    if (!headers.includes(header)) {
+      lastColumn += 1;
+      sheet.getRange(1, lastColumn).setValue(header);
+      headers.push(header);
+    }
+  });
+}
+
+function createProducer_(sheet, table, response, phoneKey) {
+  const producerId = nextId_(
+    table.records,
+    "PRODUCTOR_ID",
+    "PR"
+  );
+
+  appendByHeaders_(sheet, table.headers, {
+    PRODUCTOR_ID: producerId,
+    TELEFONO_CLAVE: phoneKey,
+    NOMBRE: response[ECOFLETE.QUESTIONS.NAME],
+    WHATSAPP: response[ECOFLETE.QUESTIONS.WHATSAPP],
+    FECHA_ALTA: new Date(),
+    ULTIMA_ACTUALIZACION: new Date(),
+    ACTIVO: ECOFLETE.YES
+  });
+
+  return producerId;
+}
+
+function updateProducer_(sheet, table, entry, response) {
+  updateRowByHeaders_(sheet, table, entry.rowNumber, {
+    NOMBRE: response[ECOFLETE.QUESTIONS.NAME],
+    WHATSAPP: response[ECOFLETE.QUESTIONS.WHATSAPP],
+    ULTIMA_ACTUALIZACION: new Date(),
+    ACTIVO: ECOFLETE.YES
+  });
+
+  return entry.data.PRODUCTOR_ID;
+}
+
+function createRequestPublication_(sheet, table, input) {
+  const response = input.response;
+
+  const origin = splitLocation_(
+    response[ECOFLETE.QUESTIONS.REQUEST_ORIGIN]
+  );
+
+  const destination = splitLocation_(
+    response[ECOFLETE.QUESTIONS.REQUEST_DESTINATION]
+  );
+
+  const cargo = response[ECOFLETE.QUESTIONS.REQUEST_CARGO];
+  const comments = response[ECOFLETE.QUESTIONS.REQUEST_DETAILS];
+
+  const title = cargo
+    ? "Traslado de " + cargo
+    : "Solicitud de flete";
+
+  const description =
+    comments ||
+    ("Se busca transporte para " + cargo + ".");
+
+  appendByHeaders_(sheet, table.headers, {
+    PUBLICACION_ID: input.publicationId,
+    TIPO_PUBLICACION: ECOFLETE.PUBLICATION_TYPES.REQUEST,
+    ACTOR_ID: input.producerId,
+    TELEFONO_CLAVE: input.phoneKey,
+    FECHA_CARGA: input.submittedAt,
+
+    ORIGEN: origin.city,
+    PROVINCIA_ORIGEN: origin.province,
+
+    DESTINO: destination.city,
+    PROVINCIA_DESTINO: destination.province,
+
+    FECHA_DESDE: response[ECOFLETE.QUESTIONS.REQUEST_DATE],
+    FECHA_HASTA: response[ECOFLETE.QUESTIONS.REQUEST_DATE],
+
+    FLEXIBILIDAD_FECHA:
+      response[ECOFLETE.QUESTIONS.REQUEST_FLEXIBILITY],
+
+    CATEGORIA_CARGA:
+      cargo,
+
+    DETALLE_CARGA:
+      cargo,
+
+    TIPO_VEHICULO:
+      response[ECOFLETE.QUESTIONS.REQUEST_VEHICLE],
+
+    "CAPACIDAD/CANTIDAD":
+      response[ECOFLETE.QUESTIONS.REQUEST_AMOUNT],
+
+    PRECIO_ESTIMADO:
+      normalizePrice_(
+        response[ECOFLETE.QUESTIONS.REQUEST_BUDGET]
+      ),
+
+    MONEDA: ECOFLETE.CURRENCY,
+
+    ESTADO_ADMIN:
+      ECOFLETE.ADMIN_STATUS.PENDING,
+
+    VISIBLE_WEB:
+      ECOFLETE.NO,
+
+    TITULO_WEB:
+      title,
+
+    DESCRIPCION_WEB:
+      description,
+
+    FECHA_ULTIMA_EDICION:
+      new Date()
+  });
 }
 
 function normalizeWhatsApp(value) {
@@ -464,7 +782,9 @@ function sanitizePublication_(record, frontendType) {
     },
     date: asIsoDate_(record.FECHA_DESDE),
     dateEnd: asIsoDate_(record.FECHA_HASTA),
-    dateFlexibility: "",
+    dateFlexibility: record.FLEXIBILIDAD_FECHA !== ""
+      ? "+/- " + record.FLEXIBILIDAD_FECHA + " días"
+      : "",
     category: String(record.CATEGORIA_CARGA || ""),
     vehicle: String(record.TIPO_VEHICULO || record.PUBLIC_VEHICLE || ""),
     capacity: String(record["CAPACIDAD/CANTIDAD"] || ""),
@@ -475,7 +795,7 @@ function sanitizePublication_(record, frontendType) {
     imageAlt: title ? "Foto del vehículo para " + title : "Foto del vehículo",
     priceEstimate: Number.isFinite(price) ? price : null,
     currency: String(record.MONEDA || ECOFLETE.CURRENCY),
-    priceNote: "Estimado por el transportista",
+    priceNote: frontendType === "request" ? "Presupuesto estimado" : "Estimado por el transportista",
     publishedAt: asIsoDate_(record.FECHA_ULTIMA_EDICION || record.FECHA_CARGA),
     featured: false,
     sortOrder: ""
@@ -502,4 +822,20 @@ function parseDate_(value) {
 function startOfDay_(date) {
   if (!date) return null;
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function listarFormsProductores() {
+  const files = DriveApp.getFilesByName("EcoFlete — Buscar un flete");
+
+  Logger.log("=== FORMS DE PRODUCTORES ===");
+
+  while (files.hasNext()) {
+    const file = files.next();
+
+    Logger.log(
+      "ID: " + file.getId() +
+      " | Creado: " + file.getDateCreated() +
+      " | URL: https://docs.google.com/forms/d/" + file.getId() + "/edit"
+    );
+  }
 }

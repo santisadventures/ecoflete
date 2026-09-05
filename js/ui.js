@@ -14,10 +14,15 @@ const EcoFleteUi = (() => {
   function initFormLinks() {
     document.querySelectorAll("[data-form-link]").forEach((link) => {
       const kind = link.dataset.formLink;
-      const url = getFormUrl(kind, link.dataset.listingId);
+      const configuredUrl = getFormUrl(kind, link.dataset.listingId);
+      const fallbackUrl = link.getAttribute("href") && link.getAttribute("href") !== "#" ? link.getAttribute("href") : "";
+      const url = configuredUrl || fallbackUrl;
 
-      if (url) {
-        link.setAttribute("href", url);
+      if (configuredUrl) {
+        link.setAttribute("href", configuredUrl);
+      }
+
+      if (url && /^https?:\/\//.test(url)) {
         link.setAttribute("target", "_blank");
         link.setAttribute("rel", "noopener");
       }

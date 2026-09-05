@@ -112,3 +112,39 @@
     flex-direction: column;
   }
 }
+
+/* Mobile hero framing */
+@media (max-width: 760px) {
+  .hero__image {
+    object-position: 72% center;
+  }
+
+  .hero__shade {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(13, 18, 16, 0.44) 0%,
+        rgba(13, 18, 16, 0.28) 34%,
+        rgba(13, 18, 16, 0.72) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(13, 18, 16, 0.62) 0%,
+        rgba(13, 18, 16, 0.28) 55%,
+        rgba(13, 18, 16, 0.08) 100%
+      );
+  }
+
+  .hero__content {
+    max-width: 520px;
+    padding: 132px 20px 54px;
+  }
+
+  .hero h1 {
+    max-width: 390px;
+  }
+
+  .hero p:not(.eyebrow) {
+    max-width: 370px;
+  }
+}

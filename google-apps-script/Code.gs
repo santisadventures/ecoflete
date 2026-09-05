@@ -839,3 +839,8 @@ function listarFormsProductores() {
     );
   }
 }
+
+function verUrlPublicaProductores() {
+  const form = FormApp.openById("1oATL63TiE9GquZt0XrcrBLftZwL46KGYyLgLCu5Xa-o");
+  Logger.log("URL PUBLICA: " + form.getPublishedUrl());
+}

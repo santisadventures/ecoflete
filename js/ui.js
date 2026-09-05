@@ -13,18 +13,22 @@ const EcoFleteUi = (() => {
 
   function initFormLinks() {
     document.querySelectorAll("[data-form-link]").forEach((link) => {
-      link.addEventListener("click", (event) => {
-        const kind = link.dataset.formLink;
-        const url = getFormUrl(kind, link.dataset.listingId);
-        EcoFleteApi.track(`${kind}_form_clicked`);
-        if (!url) {
-          event.preventDefault();
-          alert("Falta configurar el enlace del formulario en js/config.js.");
-          return;
-        }
+      const kind = link.dataset.formLink;
+      const url = getFormUrl(kind, link.dataset.listingId);
+
+      if (url) {
         link.setAttribute("href", url);
         link.setAttribute("target", "_blank");
         link.setAttribute("rel", "noopener");
+      }
+
+      link.addEventListener("click", (event) => {
+        EcoFleteApi.track(`${kind}_form_clicked`);
+
+        if (!url) {
+          event.preventDefault();
+          alert("Falta configurar el enlace del formulario en js/config.js.");
+        }
       });
     });
   }

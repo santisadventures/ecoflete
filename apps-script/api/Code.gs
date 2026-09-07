@@ -111,7 +111,8 @@ function getPublicacionesActivas_() {
       descripcion: clean_(row[index['DESCRIPCION_WEB']]),
 
       tipoVehiculo: clean_(row[index['TIPO_VEHICULO']]),
-      fotoVehiculoUrl: clean_(row[index['FOTO_VEHICULO_URL']])
+      fotoVehiculoUrl: clean_(row[index['FOTO_VEHICULO_URL']]),
+      fotoCargaUrl: clean_(row[index['FOTO_CARGA_URL']])
     }));
 }
 

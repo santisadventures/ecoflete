@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Buscar un flete - EcoFlete</title>
+
+    <meta
+      name="description"
+      content="Publicá qué necesitás transportar y EcoFlete te conecta con fleteros que tengan capacidad disponible."
+    >
+
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/formulario.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+  </head>
+
+  <body>
+
+    <header class="site-header">
+      <a class="brand" href="../index.html">
+        <span class="brand__mark" aria-hidden="true">EF</span>
+        <span>EcoFlete</span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span>Menú</span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+        <a href="../viajes.html">Viajes disponibles</a>
+        <a href="../cargas.html">Solicitudes de viaje</a>
+        <a href="../index.html#como-funciona">Cómo funciona</a>
+        <a class="nav-action" href="../index.html#publicar">+ Publicar</a>
+      </nav>
+    </header>
+
+
+    <main class="form-page">
+
+      <section class="form-hero">
+        <span class="rule"></span>
+
+        <p class="form-hero__eyebrow">Necesito un flete</p>
+
+        <h1>Contanos qué necesitás transportar.</h1>
+
+        <p class="form-hero__intro">
+          Publicá tu solicitud para que fleteros con recorridos compatibles
+          puedan encontrarla. EcoFlete revisa cada publicación antes de mostrarla.
+        </p>
+      </section>
+
+
+      <section class="form-shell">
+
+        <form class="ecoflete-form" id="request-form">
+
+          <fieldset class="form-section">
+            <legend>
+              <span>01</span>
+              Tus datos
+            </legend>
+
+            <p class="form-section__description">
+              Esta información es privada y no se muestra públicamente.
+            </p>
+
+            <div class="form-grid">
+
+              <label class="form-field form-field--wide">
+                <span>Nombre y apellido *</span>
+                <input
+                  type="text"
+                  name="nombre"
+                  autocomplete="name"
+                  placeholder="Juan Pérez"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>WhatsApp *</span>
+                <input
+                  type="tel"
+                  name="whatsapp"
+                  autocomplete="tel"
+                  placeholder="+54 9 11 1234 5678"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Email</span>
+                <input
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  placeholder="nombre@email.com"
+                >
+              </label>
+
+            </div>
+          </fieldset>
+
+
+          <fieldset class="form-section">
+            <legend>
+              <span>02</span>
+              El traslado
+            </legend>
+
+            <div class="form-grid">
+
+              <label class="form-field">
+                <span>Origen *</span>
+                <input
+                  type="text"
+                  name="origen"
+                  placeholder="Localidad, Provincia"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Destino *</span>
+                <input
+                  type="text"
+                  name="destino"
+                  placeholder="Localidad, Provincia"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Fecha estimada *</span>
+                <input
+                  type="date"
+                  name="fecha"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Días de flexibilidad</span>
+                <input
+                  type="number"
+                  name="flexibilidad"
+                  min="0"
+                  max="30"
+                  placeholder="Ej. 3"
+                >
+              </label>
+
+            </div>
+          </fieldset>
+
+
+          <fieldset class="form-section">
+            <legend>
+              <span>03</span>
+              La carga
+            </legend>
+
+            <div class="form-grid">
+
+              <label class="form-field form-field--wide">
+                <span>¿Qué necesitás transportar? *</span>
+                <input
+                  type="text"
+                  name="carga"
+                  maxlength="300"
+                  placeholder="Ej. 10 terneros, maquinaria agrícola, pallets..."
+                  required
+                >
+              </label>
+
+              <label class="form-field form-field--wide">
+                <span>¿Qué tipo de transporte necesitás?</span>
+                <input
+                  type="text"
+                  name="tipo_transporte"
+                  placeholder="Ej. jaula ganadera, chasis, semirremolque..."
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Peso / volumen / cantidad *</span>
+                <input
+                  type="text"
+                  name="cantidad"
+                  placeholder="Ej. 4 toneladas"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Presupuesto estimado</span>
+                <input
+                  type="text"
+                  name="presupuesto"
+                  placeholder="Ej. $350.000"
+                >
+              </label>
+
+            </div>
+          </fieldset>
+
+
+          <fieldset class="form-section">
+            <legend>
+              <span>04</span>
+              Foto de la carga *
+            </legend>
+
+            <p class="form-section__description">
+              Subí una imagen del producto, hacienda o carga que necesitás transportar. La foto es obligatoria.
+            </p>
+
+            <label class="upload-field">
+              <input
+                type="file"
+                name="foto"
+                accept="image/*"
+                required
+              >
+
+              <span class="upload-field__icon">+</span>
+
+              <span class="upload-field__content">
+                <strong>Seleccionar imagen</strong>
+                <small>JPG, PNG o HEIC · Máximo 10 MB</small>
+                <small id="foto-feedback" class="upload-feedback"></small>
+              </span>
+            </label>
+          </fieldset>
+
+
+          <fieldset class="form-section">
+            <legend>
+              <span>05</span>
+              Información adicional
+            </legend>
+
+            <label class="form-field">
+              <span>Comentarios adicionales</span>
+
+              <textarea
+                name="comentarios"
+                rows="5"
+                maxlength="500"
+                placeholder="Contanos cualquier detalle que pueda ser útil para coordinar el traslado."
+              ></textarea>
+            </label>
+          </fieldset>
+
+
+          <div class="form-submit">
+
+            <div>
+              <strong>Tu información de contacto no será pública.</strong>
+
+              <p>
+                EcoFlete revisará la solicitud antes de publicarla.
+              </p>
+            </div>
+
+            <button
+              class="button button--primary"
+              type="submit"
+            >
+              Publicar solicitud
+            </button>
+
+            <div id="form-status" class="form-status" aria-live="polite"></div>
+
+          </div>
+
+        </form>
+
+      </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+
+      <div>
+        <strong>EcoFlete</strong>
+
+        <p>
+          Conectamos pedidos de viaje con kilómetros disponibles.
+        </p>
+
+        <small>
+          EcoFlete funciona como intermediario y no es el transportista
+          de los viajes publicados.
+        </small>
+      </div>
+
+      <nav aria-label="Navegación secundaria">
+        <a href="../index.html">Inicio</a>
+        <a href="../viajes.html">Viajes disponibles</a>
+        <a href="../cargas.html">Solicitudes de viaje</a>
+        <a href="../index.html#publicar">Ofrecer un flete</a>
+        <a href="index.html">Buscar un flete</a>
+      </nav>
+
+    </footer>
+
+
+    <script src="../js/ui.js"></script>
+
+    <script>
+    const ECOFLETE_FORM_ENDPOINT =
+      "https://script.google.com/macros/s/AKfycbxU4QigOM_XMGtyzJMg0Er__zb1qCvLyBVR4DwjOmxIPkABcH-kll3JlQVV_u9kXiyPBA/exec";
+
+    const form = document.querySelector("#request-form");
+    const formStatus = document.querySelector("#form-status");
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const result = String(reader.result || "");
+          resolve(result.split(",")[1] || "");
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    const fotoInput = form.elements.foto;
+    const fotoFeedback = document.querySelector("#foto-feedback");
+
+    fotoInput.addEventListener("change", () => {
+      const file = fotoInput.files[0];
+
+      if (!file) {
+        fotoFeedback.textContent = "";
+        return;
+      }
+
+      fotoFeedback.textContent = "✓ " + file.name;
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      const foto = form.elements.foto.files[0];
+
+      if (!foto) {
+        alert("Tenés que subir una foto de la carga.");
+        return;
+      }
+
+      if (!foto.type.startsWith("image/")) {
+        alert("La foto debe ser una imagen.");
+        return;
+      }
+
+      if (foto.size > 10 * 1024 * 1024) {
+        alert("La foto no puede superar los 10 MB.");
+        return;
+      }
+
+      const textoOriginal = submitButton.textContent;
+
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = "Publicando...";
+        formStatus.className = "form-status form-status--loading";
+        formStatus.textContent = "Publicando solicitud...";
+
+        const fotoBase64 = await fileToBase64(foto);
+
+        const payload = {
+          action: "buscar_flete",
+          nombre: form.elements.nombre.value.trim(),
+          whatsapp: form.elements.whatsapp.value.trim(),
+          email: form.elements.email.value.trim(),
+          origen: form.elements.origen.value.trim(),
+          destino: form.elements.destino.value.trim(),
+          fecha: form.elements.fecha.value,
+          flexibilidad: form.elements.flexibilidad.value.trim(),
+          carga: form.elements.carga.value.trim(),
+          tipoTransporte: form.elements.tipo_transporte.value.trim(),
+          cantidad: form.elements.cantidad.value.trim(),
+          presupuesto: form.elements.presupuesto.value.trim(),
+          comentarios: form.elements.comentarios.value.trim(),
+          foto: {
+            name: foto.name,
+            type: foto.type,
+            base64: fotoBase64
+          }
+        };
+
+        const response = await fetch(ECOFLETE_FORM_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!result.ok) {
+          throw new Error(result.error || "No se pudo publicar la solicitud.");
+        }
+
+        formStatus.className = "form-status form-status--success";
+        formStatus.textContent =
+          "✓ Solicitud recibida. La vamos a revisar antes de publicarla en EcoFlete.";
+
+        form.reset();
+        fotoFeedback.textContent = "";
+
+      } catch (error) {
+        console.error(error);
+        formStatus.className = "form-status form-status--error";
+        formStatus.textContent =
+          "No pudimos enviar la solicitud. Por favor, intentá nuevamente.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = textoOriginal;
+      }
+    });
+  </script>
+
+  </body>
+</html>

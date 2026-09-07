@@ -87,8 +87,8 @@ const EcoFleteApi = (() => {
         title: listing.titulo || "",
         description: listing.descripcion || "",
 
-        image: listing.fotoVehiculoUrl || "assets/images/ecoflete-hero.png",
-        imageAlt: "Solicitud de transporte publicada en EcoFlete",
+        image: listing.fotoCargaUrl || "assets/images/ecoflete-hero.png",
+        imageAlt: "Carga publicada en EcoFlete",
 
         priceEstimate: listing.precioEstimado || null,
         currency: listing.moneda || "ARS",

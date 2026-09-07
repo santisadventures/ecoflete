@@ -742,3 +742,17 @@
 
 }
 
+
+/* MOBILE — subir leyenda y contenido 50px */
+@media (max-width: 760px) {
+
+  .hero .eyebrow {
+    top: 120px !important;
+  }
+
+  .hero__content {
+    padding-top: 200px !important;
+  }
+
+}
+

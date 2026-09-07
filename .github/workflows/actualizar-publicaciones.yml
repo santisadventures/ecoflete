@@ -1,0 +1,43 @@
+name: Actualizar publicaciones EcoFlete
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Descargar publicaciones moderadas
+        run: |
+          curl --fail --silent --show-error --location \
+            "https://script.google.com/macros/s/AKfycbxXmYNit72--Sg4suAbW_1hODV85GeV_IPsuVLillFuLOMAUFfrpE2EqVokCFg5-fmB/exec" \
+            --output data/publicaciones.json.tmp
+
+      - name: Validar JSON
+        run: |
+          python3 -m json.tool data/publicaciones.json.tmp > /dev/null
+          mv data/publicaciones.json.tmp data/publicaciones.json
+
+      - name: Publicar cambios
+        run: |
+          if git diff --quiet -- data/publicaciones.json; then
+            echo "No hay cambios en las publicaciones."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/publicaciones.json
+          git commit -m "Actualiza publicaciones EcoFlete"
+          git push

@@ -1,10 +1,15 @@
 const EcoFleteUi = (() => {
-  const fallbackImage = "assets/images/ecoflete-hero.png";
+  const fallbackImage =
+    "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="#d9d9d9"/></svg>'
+    );
 
   function initNavigation() {
     const button = document.querySelector(".nav-toggle");
     const nav = document.querySelector(".site-nav");
     if (!button || !nav) return;
+
     button.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("is-open");
       button.setAttribute("aria-expanded", String(isOpen));
@@ -15,7 +20,11 @@ const EcoFleteUi = (() => {
     document.querySelectorAll("[data-form-link]").forEach((link) => {
       const kind = link.dataset.formLink;
       const configuredUrl = getFormUrl(kind, link.dataset.listingId);
-      const fallbackUrl = link.getAttribute("href") && link.getAttribute("href") !== "#" ? link.getAttribute("href") : "";
+      const fallbackUrl =
+        link.getAttribute("href") && link.getAttribute("href") !== "#"
+          ? link.getAttribute("href")
+          : "";
+
       const url = configuredUrl || fallbackUrl;
 
       if (configuredUrl) {
@@ -40,71 +49,151 @@ const EcoFleteUi = (() => {
 
   function getFormUrl(kind, listingId = "") {
     const config = window.ECOFLETE_CONFIG;
+
     if (kind === "offer") return config.OFFER_FREIGHT_FORM_URL;
     if (kind === "request") return config.REQUEST_FREIGHT_FORM_URL;
+
     if (kind === "interest" && config.INTEREST_FORM_URL) {
       const separator = config.INTEREST_FORM_URL.includes("?") ? "&" : "?";
-      return `${config.INTEREST_FORM_URL}${separator}listingId=${encodeURIComponent(listingId)}`;
+
+      return `${config.INTEREST_FORM_URL}${separator}listingId=${encodeURIComponent(
+        listingId
+      )}`;
     }
+
     return "";
   }
 
   function listingCard(listing) {
     const isRequest = listing.type === "request";
     const detailUrl = `detalle.html?id=${encodeURIComponent(listing.id)}`;
-    const priceMarkup = listing.priceEstimate ? `
+
+    const imageUrl = listing.image || fallbackImage;
+
+    const priceMarkup = listing.priceEstimate
+      ? `
           <div class="listing-card__price" aria-label="Precio estimado">
             <span>Precio estimado</span>
-            <strong>${formatPrice(listing.priceEstimate, listing.currency)}</strong>
-            <small>${escapeHtml(listing.priceNote || "Estimado por el transportista")}</small>
-          </div>` : "";
+            <strong>${formatPrice(
+              listing.priceEstimate,
+              listing.currency
+            )}</strong>
+            <small>${escapeHtml(
+              listing.priceNote || "Estimado por el transportista"
+            )}</small>
+          </div>`
+      : "";
+
     return `
-      <article class="listing-card ${isRequest ? "listing-card--request" : ""}">
-        <img class="listing-card__image" src="${escapeHtml(listing.image || fallbackImage)}" alt="${escapeHtml(listing.imageAlt || listing.title)}">
+      <article class="listing-card ${
+        isRequest ? "listing-card--request" : ""
+      }">
+        <img
+          class="listing-card__image"
+          src="${escapeHtml(imageUrl)}"
+          alt="${escapeHtml(listing.imageAlt || listing.title)}"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='${fallbackImage}'"
+        >
+
         <div class="listing-card__body">
-          <span class="listing-card__badge">${isRequest ? "Pedido de viaje" : "Viaje disponible"}</span>
-          <p class="listing-card__route">${escapeHtml(listing.origin.city)} -> ${escapeHtml(listing.destination.city)}</p>
+          <span class="listing-card__badge">
+            ${isRequest ? "Pedido de viaje" : "Viaje disponible"}
+          </span>
+
+          <p class="listing-card__route">
+            ${escapeHtml(listing.origin.city)} ->
+            ${escapeHtml(listing.destination.city)}
+          </p>
+
           <h3>${escapeHtml(listing.title)}</h3>
+
           <ul class="listing-card__meta">
-            <li><strong>${formatDate(listing.date, listing.dateEnd)}</strong><br>${escapeHtml(listing.dateFlexibility || "Fecha definida")}</li>
-            <li><strong>${escapeHtml(listing.category)}</strong><br>${escapeHtml(listing.vehicle || "Vehículo a coordinar")}</li>
-            <li><strong>${escapeHtml(listing.capacity || listing.cargo || "A coordinar")}</strong><br>${isRequest ? "Carga solicitada" : "Capacidad"}</li>
-            <li><strong>${escapeHtml(listing.destination.province)}</strong><br>Destino</li>
+            <li>
+              <strong>${formatDate(listing.date, listing.dateEnd)}</strong><br>
+              ${escapeHtml(listing.dateFlexibility || "Fecha definida")}
+            </li>
+
+            <li>
+              <strong>${escapeHtml(listing.category)}</strong><br>
+              ${escapeHtml(listing.vehicle || "Vehículo a coordinar")}
+            </li>
+
+            <li>
+              <strong>${escapeHtml(
+                listing.capacity || listing.cargo || "A coordinar"
+              )}</strong><br>
+              ${isRequest ? "Carga solicitada" : "Capacidad"}
+            </li>
+
+            <li>
+              <strong>${escapeHtml(listing.destination.province)}</strong><br>
+              Destino
+            </li>
           </ul>
+
           ${priceMarkup}
-          <p class="listing-card__description">${escapeHtml(listing.description)}</p>
+
+          <p class="listing-card__description">
+            ${escapeHtml(listing.description)}
+          </p>
+
           <div class="listing-card__footer">
-            <span class="listing-card__date">${formatPublished(listing.publishedAt)}</span>
-            <a class="button button--secondary" href="${detailUrl}">${isRequest ? "Ver solicitud" : "Me interesa este flete"}</a>
+            <span class="listing-card__date">
+              ${formatPublished(listing.publishedAt)}
+            </span>
+
+            <a class="button button--secondary" href="${detailUrl}">
+              ${isRequest ? "Ver solicitud" : "Me interesa este flete"}
+            </a>
           </div>
         </div>
       </article>`;
   }
 
   function skeletonCards(count = 4) {
-    return Array.from({ length: count }, () => "<div class=\"skeleton\" aria-hidden=\"true\"></div>").join("");
+    return Array.from(
+      { length: count },
+      () => '<div class="skeleton" aria-hidden="true"></div>'
+    ).join("");
   }
 
   function formatDate(date, dateEnd) {
     if (!date) return "Fecha a coordinar";
+
     const start = shortDate(date);
+
     return dateEnd ? `${start} - ${shortDate(dateEnd)}` : start;
   }
 
   function shortDate(value) {
     const date = new Date(`${value}T12:00:00`);
-    return new Intl.DateTimeFormat("es-AR", { day: "2-digit", month: "short" }).format(date).replace(".", "");
+
+    return new Intl.DateTimeFormat("es-AR", {
+      day: "2-digit",
+      month: "short"
+    })
+      .format(date)
+      .replace(".", "");
   }
 
   function formatPublished(value) {
     if (!value) return "";
+
     const date = new Date(`${value}T12:00:00`);
-    return `Publicado ${new Intl.DateTimeFormat("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date)}`;
+
+    return `Publicado ${new Intl.DateTimeFormat("es-AR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }).format(date)}`;
   }
 
   function formatPrice(value, currency = "ARS") {
     const amount = Number(value);
+
     if (!Number.isFinite(amount)) return "";
+
     return new Intl.NumberFormat("es-AR", {
       style: "currency",
       currency: currency || "ARS",
@@ -117,13 +206,22 @@ const EcoFleteUi = (() => {
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
-      "\"": "&quot;",
+      '"': "&quot;",
       "'": "&#039;"
     }[char]));
   }
 
   initNavigation();
+
   document.addEventListener("DOMContentLoaded", initFormLinks);
 
-  return { initFormLinks, listingCard, skeletonCards, getFormUrl, formatDate, formatPrice, escapeHtml };
+  return {
+    initFormLinks,
+    listingCard,
+    skeletonCards,
+    getFormUrl,
+    formatDate,
+    formatPrice,
+    escapeHtml
+  };
 })();

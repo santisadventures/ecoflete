@@ -23,6 +23,34 @@ const EcoFleteApi = (() => {
     return filterVisibleListings(normalizeApiData(apiData));
   }
 
+  function googleDriveImageUrl(url) {
+    if (!url) return "";
+
+    try {
+      const parsed = new URL(url);
+
+      if (
+        parsed.hostname === "drive.google.com" ||
+        parsed.hostname === "www.drive.google.com"
+      ) {
+        let id = parsed.searchParams.get("id");
+
+        if (!id) {
+          const match = parsed.pathname.match(/\/d\/([^/]+)/);
+          id = match ? match[1] : "";
+        }
+
+        if (id) {
+          return `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w1200`;
+        }
+      }
+    } catch (error) {
+      console.warn("EcoFlete: URL de imagen inválida", url);
+    }
+
+    return url;
+  }
+
   function normalizeApiData(data) {
     return {
       updatedAt: data.updatedAt,
@@ -52,7 +80,7 @@ const EcoFleteApi = (() => {
         title: listing.titulo || "",
         description: listing.descripcion || "",
 
-        image: listing.fotoVehiculoUrl || "assets/images/ecoflete-hero.png",
+        image: googleDriveImageUrl(listing.fotoVehiculoUrl),
         imageAlt: "Transporte publicado en EcoFlete",
 
         priceEstimate: listing.precioEstimado || null,
@@ -87,7 +115,7 @@ const EcoFleteApi = (() => {
         title: listing.titulo || "",
         description: listing.descripcion || "",
 
-        image: listing.fotoCargaUrl || "assets/images/ecoflete-hero.png",
+        image: googleDriveImageUrl(listing.fotoCargaUrl),
         imageAlt: "Carga publicada en EcoFlete",
 
         priceEstimate: listing.precioEstimado || null,

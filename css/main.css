@@ -477,3 +477,8 @@ h3 {
   margin-top: 44px;
   gap: 16px;
 }
+
+/* CTA de oportunidades actuales */
+.section__actions--featured {
+  justify-content: center;
+}

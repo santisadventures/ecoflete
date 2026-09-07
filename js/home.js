@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mount = document.querySelector("[data-featured-listings]");
   const tabs = document.querySelectorAll("[data-featured-tab]");
   const featuredLink = document.querySelector("[data-featured-link]");
+  const featuredFormLink = document.querySelector("[data-featured-form-link]");
   if (!mount) return;
   mount.innerHTML = EcoFleteUi.skeletonCards(3);
 
@@ -16,6 +17,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (featuredLink) {
         featuredLink.href = audience === "carriers" ? "cargas.html" : "viajes.html";
         featuredLink.textContent = audience === "carriers" ? "Ver pedidos de viaje" : "Ver viajes disponibles";
+      }
+
+      if (featuredFormLink) {
+        const isCarrier = audience === "carriers";
+
+        featuredFormLink.dataset.formLink = isCarrier ? "offer" : "request";
+        featuredFormLink.textContent = isCarrier
+          ? "Publicar mi viaje"
+          : "Publicar una solicitud de viaje";
+
+        const formUrl = isCarrier
+          ? EcoFleteConfig.forms.offer
+          : EcoFleteConfig.forms.request;
+
+        featuredFormLink.href = formUrl;
       }
     };
 

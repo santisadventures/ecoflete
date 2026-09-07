@@ -1,7 +1,7 @@
 const ECOFLETE_FOTOS = {
   ROOT_FOLDER_ID: "1t6gw4Mx-AR1kn1hPMIE3MX9tBUrk6HVL",
   CARGAS_FOLDER_ID: "14upRT6R31vAn7YMUQYQJsj2CFtWz65WQ",
-  VEHICULOS_FOLDER_ID: "1VuMeaSF4D7s-0khk9uwTU27T07nnH_JH"
+  VEHICULOS_FOLDER_ID: "1_9a_DrRckpZaSRDjry1AMKDAtaUTv2_t"
 };
 
 const ECOFLETE = {
@@ -913,19 +913,29 @@ function doPost(e) {
   try {
     const payload = JSON.parse((e && e.postData && e.postData.contents) || "{}");
 
-    if (payload.action !== "buscar_flete") {
+    if (payload.action === "buscar_flete") {
+      const result = procesarSolicitudBuscarFlete_(payload);
+
       return jsonResponse_({
-        ok: false,
-        error: "Acción no reconocida."
+        ok: true,
+        publicationId: result.publicationId,
+        producerId: result.producerId
       });
     }
 
-    const result = procesarSolicitudBuscarFlete_(payload);
+    if (payload.action === "ofrecer_flete") {
+      const result = procesarSolicitudOfrecerFlete_(payload);
+
+      return jsonResponse_({
+        ok: true,
+        publicationId: result.publicationId,
+        carrierId: result.carrierId
+      });
+    }
 
     return jsonResponse_({
-      ok: true,
-      publicationId: result.publicationId,
-      producerId: result.producerId
+      ok: false,
+      error: "Acción no reconocida."
     });
 
   } catch (error) {
@@ -936,6 +946,196 @@ function doPost(e) {
       error: String(error.message || error)
     });
   }
+}
+
+
+
+function procesarSolicitudOfrecerFlete_(payload) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+
+  try {
+    validarSolicitudOfrecerFlete_(payload);
+
+    const spreadsheet = SpreadsheetApp.openById(ECOFLETE.SPREADSHEET_ID);
+
+    const carriersSheet = getRequiredSheet_(
+      spreadsheet,
+      ECOFLETE.SHEETS.CARRIERS
+    );
+
+    const publicationsSheet = getRequiredSheet_(
+      spreadsheet,
+      ECOFLETE.SHEETS.PUBLICATIONS
+    );
+
+    const carriers = getSheetTable_(carriersSheet);
+    const publications = getSheetTable_(publicationsSheet);
+
+    const phoneKey = normalizeWhatsApp(payload.whatsapp);
+
+    if (!phoneKey) {
+      throw new Error("No se pudo normalizar el WhatsApp recibido.");
+    }
+
+    const foto = guardarFotoVehiculo_(payload.foto);
+
+    const response = {};
+
+    response[ECOFLETE.QUESTIONS.NAME] = payload.nombre || "";
+    response[ECOFLETE.QUESTIONS.COMPANY] = payload.empresa || "";
+    response[ECOFLETE.QUESTIONS.WHATSAPP] = payload.whatsapp || "";
+    response[ECOFLETE.QUESTIONS.EMAIL] = payload.email || "";
+    response[ECOFLETE.QUESTIONS.BASE_LOCATION] = payload.localidadBase || "";
+    response[ECOFLETE.QUESTIONS.VEHICLE] = payload.vehiculo || "";
+    response[ECOFLETE.QUESTIONS.CARGO_TYPE] = payload.carga || "";
+    response[ECOFLETE.QUESTIONS.ORIGIN] = payload.origen || "";
+    response[ECOFLETE.QUESTIONS.DESTINATION] = payload.destino || "";
+    response[ECOFLETE.QUESTIONS.DATE_FROM] = payload.desde || "";
+    response[ECOFLETE.QUESTIONS.DATE_UNTIL] = payload.hasta || "";
+    response[ECOFLETE.QUESTIONS.CAPACITY] = payload.capacidad || "";
+    response[ECOFLETE.QUESTIONS.PRICE] = payload.precio || "";
+    response[ECOFLETE.QUESTIONS.DETAILS] = payload.comentarios || "";
+    response[ECOFLETE.QUESTIONS.USUAL_ZONES] = payload.zonas || "";
+
+    response[ECOFLETE.QUESTIONS.PHOTO] =
+      "https://drive.google.com/file/d/" + foto.id + "/view";
+
+    const existingCarrier = findRecordByValue_(
+      carriers,
+      "TELEFONO_CLAVE",
+      phoneKey
+    );
+
+    const carrierId = existingCarrier
+      ? updateCarrier_(
+          carriersSheet,
+          carriers,
+          existingCarrier,
+          response,
+          phoneKey
+        )
+      : createCarrier_(
+          carriersSheet,
+          carriers,
+          response,
+          phoneKey
+        );
+
+    const publicationId = nextId_(
+      publications.records,
+      "PUBLICACION_ID",
+      "EF"
+    );
+
+    createOfferPublication_(
+      publicationsSheet,
+      publications,
+      {
+        publicationId,
+        carrierId,
+        phoneKey,
+        response,
+        submittedAt: new Date()
+      }
+    );
+
+    return {
+      publicationId,
+      carrierId
+    };
+
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+
+function validarSolicitudOfrecerFlete_(payload) {
+  const required = {
+    nombre: "Nombre y apellido",
+    whatsapp: "WhatsApp",
+    localidadBase: "Localidad base",
+    vehiculo: "Tipo de vehículo",
+    carga: "Tipo de carga",
+    origen: "Origen",
+    destino: "Destino",
+    desde: "Fecha desde",
+    hasta: "Fecha hasta",
+    capacidad: "Capacidad",
+    precio: "Precio estimado",
+    foto: "Foto del vehículo"
+  };
+
+  Object.keys(required).forEach((key) => {
+    if (!payload[key]) {
+      throw new Error("Falta completar: " + required[key]);
+    }
+  });
+}
+
+
+function guardarFotoVehiculo_(foto) {
+  if (!foto || !foto.base64) {
+    throw new Error("No se recibió la foto del vehículo.");
+  }
+
+  if (!String(foto.type || "").startsWith("image/")) {
+    throw new Error("El archivo del vehículo debe ser una imagen.");
+  }
+
+  const base64 = String(foto.base64).replace(
+    /^data:[^;]+;base64,/,
+    ""
+  );
+
+  const bytes = Utilities.base64Decode(base64);
+
+  if (bytes.length > 10 * 1024 * 1024) {
+    throw new Error("La foto no puede superar los 10 MB.");
+  }
+
+  const root = DriveApp.getFolderById(
+    ECOFLETE_FOTOS.ROOT_FOLDER_ID
+  );
+
+  const folders = root.getFoldersByName("vehiculos");
+
+  const folder = folders.hasNext()
+    ? folders.next()
+    : root.createFolder("vehiculos");
+
+  const safeName = String(foto.name || "vehiculo.jpg")
+    .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+  const name =
+    Utilities.formatDate(
+      new Date(),
+      Session.getScriptTimeZone(),
+      "yyyyMMdd-HHmmss"
+    ) +
+    "-" +
+    safeName;
+
+  const blob = Utilities.newBlob(
+    bytes,
+    foto.type || "image/jpeg",
+    name
+  );
+
+  const file = folder.createFile(blob);
+
+  file.setSharing(
+    DriveApp.Access.ANYONE_WITH_LINK,
+    DriveApp.Permission.VIEW
+  );
+
+  return {
+    id: file.getId(),
+    url:
+      "https://drive.google.com/uc?export=view&id=" +
+      file.getId()
+  };
 }
 
 
@@ -1166,4 +1366,28 @@ function crearCarpetasFotosEcoFleteV2() {
   Logger.log("ROOT_FOLDER_ID=" + root.getId());
   Logger.log("CARGAS_FOLDER_ID=" + cargas.getId());
   Logger.log("VEHICULOS_FOLDER_ID=" + vehiculos.getId());
+}
+
+
+function crearCarpetaVehiculosEcoFleteV2() {
+  const root = DriveApp.getFolderById(
+    "1t6gw4Mx-AR1kn1hPMIE3MX9tBUrk6HVL"
+  );
+
+  const vehiculos = root.createFolder("vehiculos");
+
+  Logger.log("VEHICULOS_FOLDER_ID=" + vehiculos.getId());
+}
+
+
+function verificarCarpetaVehiculosEcoFlete() {
+  const id = ECOFLETE_FOTOS.VEHICULOS_FOLDER_ID;
+
+  Logger.log("ID CONFIGURADO=[" + id + "]");
+  Logger.log("LARGO ID=" + id.length);
+
+  const folder = DriveApp.getFolderById(id);
+
+  Logger.log("CARPETA OK=" + folder.getName());
+  Logger.log("CARPETA ID=" + folder.getId());
 }

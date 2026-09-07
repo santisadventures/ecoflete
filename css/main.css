@@ -440,3 +440,57 @@ h3 {
 .hero__benefits {
   display: none;
 }
+
+/* Ajuste hero landing — 2026-09-07 */
+.hero {
+  min-height: 760px;
+}
+
+.hero__content {
+  max-width: 800px;
+  padding-top: 245px;
+  padding-bottom: 110px;
+}
+
+.hero p:not(.eyebrow) {
+  max-width: 560px;
+  margin-top: 30px;
+}
+
+.hero__actions {
+  margin-top: 38px;
+  gap: 16px;
+}
+
+
+/* Hero landing — bloque centrado verticalmente */
+.hero {
+  min-height: 760px;
+  display: flex;
+  align-items: center;
+}
+
+.hero__content {
+  width: 100%;
+  max-width: 800px;
+  padding: 110px clamp(24px, 6vw, 72px) 70px;
+}
+
+.eyebrow {
+  margin-bottom: 28px;
+}
+
+.hero h1 {
+  margin-bottom: 34px;
+}
+
+.hero p:not(.eyebrow) {
+  margin: 0;
+  max-width: 590px;
+  line-height: 1.5;
+}
+
+.hero__actions {
+  margin-top: 42px;
+}
+

@@ -10,8 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const renderAudience = (audience) => {
       const key = audience === "carriers" ? "freightRequests" : "offeredTrips";
       const listings = (data[key] || [])
-        .filter((item) => item.featured || audience === "carriers")
-        .slice(0, 3);
+        .slice(0, 6);
       mount.dataset.featuredAudience = audience;
       mount.innerHTML = listings.map(EcoFleteUi.listingCard).join("");
       if (featuredLink) {

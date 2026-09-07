@@ -540,3 +540,205 @@
     right: calc(-35% - 70px) !important;
   }
 }
+
+
+/* =========================================
+   ECOFLETE — HERO MOBILE 2026-09-07
+   ========================================= */
+
+@media (max-width: 700px) {
+
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  /* Ampliar la fotografía de fondo */
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 58% center;
+    transform: scale(1.14);
+    transform-origin: center center;
+  }
+
+  /* Oscurecido para conservar legibilidad */
+  .hero__shade {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(7, 14, 18, 0.42) 0%,
+        rgba(7, 14, 18, 0.18) 42%,
+        rgba(7, 14, 18, 0.55) 100%
+      );
+  }
+
+  /* Bloque principal más abajo */
+  .hero__content {
+    width: 100%;
+    max-width: none;
+    padding:
+      150px
+      24px
+      190px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero .eyebrow {
+    display: none;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.1rem, 14vw, 4.25rem);
+    line-height: 0.88;
+    letter-spacing: -0.065em;
+    max-width: 290px;
+    margin: 0 0 30px;
+  }
+
+  .hero p:not(.eyebrow) {
+    font-size: 1rem;
+    line-height: 1.45;
+    max-width: 285px;
+    margin: 0;
+  }
+
+  .hero__actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 195px;
+    max-width: 100%;
+  }
+
+  .hero__actions .button {
+    width: 100%;
+    justify-content: space-between;
+    min-height: 52px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+}
+
+
+/* MOBILE — bajar contenido principal del hero */
+@media (max-width: 700px) {
+
+  .hero__content {
+    padding-top: 235px !important;
+  }
+
+  .hero h1 {
+    margin-bottom: 28px !important;
+  }
+
+  .hero p:not(.eyebrow) {
+    margin-top: 0 !important;
+    margin-bottom: 32px !important;
+  }
+
+  .hero__actions {
+    margin-top: 0 !important;
+  }
+
+}
+
+
+/* MOBILE — bajar título y descripción del hero */
+@media (max-width: 760px) {
+
+  .hero__content > h1,
+  .hero__content > p:not(.eyebrow) {
+    transform: translateY(85px) !important;
+  }
+
+}
+
+
+/* MOBILE — posición vertical definitiva del contenido */
+@media (max-width: 760px) {
+
+  .hero__content {
+    padding-top: 300px !important;
+  }
+
+  .hero__content > h1,
+  .hero__content > p:not(.eyebrow) {
+    transform: none !important;
+  }
+
+}
+
+
+/* MOBILE — mostrar leyenda superior del hero */
+@media (max-width: 760px) {
+
+  .hero .eyebrow {
+    display: inline-flex !important;
+    position: absolute !important;
+
+    top: 220px;
+    left: clamp(28px, 8vw, 40px);
+
+    margin: 0 !important;
+
+    font-size: 0.62rem;
+    padding: 7px 12px;
+
+    z-index: 5;
+  }
+
+}
+
+
+/* MOBILE — posiciones finales del hero */
+@media (max-width: 760px) {
+
+  .hero .eyebrow {
+    display: inline-flex !important;
+    position: absolute !important;
+    top: 170px !important;
+    left: clamp(28px, 8vw, 40px);
+    margin: 0 !important;
+    z-index: 5;
+  }
+
+  .hero__content {
+    padding-top: 300px !important;
+  }
+
+}
+
+
+/* MOBILE — ajuste final contenido a 250px */
+@media (max-width: 760px) {
+  .hero__content {
+    padding-top: 250px !important;
+  }
+}
+
+
+/* MOBILE — posiciones definitivas */
+@media (max-width: 760px) {
+
+  /* Leyenda superior */
+  .hero .eyebrow {
+    display: inline-flex !important;
+    position: absolute !important;
+    top: 250px !important;
+    left: clamp(28px, 8vw, 40px);
+    margin: 0 !important;
+    z-index: 5;
+  }
+
+  /* Título + descripción */
+  .hero__content {
+    padding-top: 300px !important;
+  }
+
+}
+

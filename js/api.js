@@ -1,6 +1,7 @@
 const EcoFleteApi = (() => {
   async function getListings() {
     const config = window.ECOFLETE_CONFIG;
+
     if (config.DEMO_MODE || !config.API_URL) {
       const response = await fetch("data/demo-listings.json");
       if (!response.ok) throw new Error("No se pudieron cargar los datos demo.");
@@ -8,8 +9,93 @@ const EcoFleteApi = (() => {
     }
 
     const response = await fetch(config.API_URL, { cache: "no-store" });
-    if (!response.ok) throw new Error("No se pudo actualizar EcoFlete.");
-    return filterVisibleListings(await response.json());
+
+    if (!response.ok) {
+      throw new Error("No se pudo actualizar EcoFlete.");
+    }
+
+    const apiData = await response.json();
+
+    if (!apiData.ok) {
+      throw new Error(apiData.error || "La API de EcoFlete devolvió un error.");
+    }
+
+    return filterVisibleListings(normalizeApiData(apiData));
+  }
+
+  function normalizeApiData(data) {
+    return {
+      updatedAt: data.updatedAt,
+
+      offeredTrips: (data.fletesOfrecidos || []).map(listing => ({
+        id: listing.id,
+        type: "offered",
+
+        origin: {
+          city: listing.origen || "",
+          province: listing.provinciaOrigen || ""
+        },
+
+        destination: {
+          city: listing.destino || "",
+          province: listing.provinciaDestino || ""
+        },
+
+        date: listing.fechaDesde || "",
+        dateEnd: listing.fechaHasta || null,
+        dateFlexibility: "",
+
+        category: listing.categoriaCarga || "",
+        vehicle: listing.tipoVehiculo || "",
+        capacity: listing.capacidad || "",
+
+        title: listing.titulo || "",
+        description: listing.descripcion || "",
+
+        image: listing.fotoVehiculoUrl || "assets/images/ecoflete-hero.png",
+        imageAlt: "Transporte publicado en EcoFlete",
+
+        priceEstimate: listing.precioEstimado || null,
+        currency: listing.moneda || "ARS",
+        priceNote: "Estimado por el transportista",
+
+        featured: false
+      })),
+
+      freightRequests: (data.fletesBuscados || []).map(listing => ({
+        id: listing.id,
+        type: "request",
+
+        origin: {
+          city: listing.origen || "",
+          province: listing.provinciaOrigen || ""
+        },
+
+        destination: {
+          city: listing.destino || "",
+          province: listing.provinciaDestino || ""
+        },
+
+        date: listing.fechaDesde || "",
+        dateEnd: listing.fechaHasta || null,
+        dateFlexibility: "",
+
+        category: listing.categoriaCarga || "",
+        vehicle: listing.tipoVehiculo || "",
+        cargo: listing.detalleCarga || listing.capacidad || "",
+
+        title: listing.titulo || "",
+        description: listing.descripcion || "",
+
+        image: listing.fotoVehiculoUrl || "assets/images/ecoflete-hero.png",
+        imageAlt: "Solicitud de transporte publicada en EcoFlete",
+
+        priceEstimate: listing.precioEstimado || null,
+        currency: listing.moneda || "ARS",
+
+        featured: false
+      }))
+    };
   }
 
   function filterVisibleListings(data) {
@@ -22,17 +108,29 @@ const EcoFleteApi = (() => {
 
   function isCurrentListing(listing) {
     if (!listing.dateEnd) return true;
+
     const dateEnd = new Date(`${listing.dateEnd}T23:59:59`);
-    if (Number.isNaN(dateEnd.getTime())) return false;
+
+    if (Number.isNaN(dateEnd.getTime())) {
+      return false;
+    }
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
     return dateEnd >= today;
   }
 
   function track(eventName, payload = {}) {
     const config = window.ECOFLETE_CONFIG;
+
     if (!config.ANALYTICS_ENABLED) return;
-    window.dispatchEvent(new CustomEvent("ecoflete:analytics", { detail: { eventName, payload } }));
+
+    window.dispatchEvent(
+      new CustomEvent("ecoflete:analytics", {
+        detail: { eventName, payload }
+      })
+    );
   }
 
   return { getListings, track };

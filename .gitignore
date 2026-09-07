@@ -2,3 +2,13 @@
 node_modules/
 dist/
 .env
+.aider*
+
+# Backups locales
+backup-*/
+
+# Configuracion local de Google Apps Script
+.clasp.json
+
+# Backups internos de Apps Script
+apps-script/**/*.backup-*

@@ -436,3 +436,7 @@ h3 {
     scroll-behavior: auto;
   }
 }
+
+.hero__benefits {
+  display: none;
+}

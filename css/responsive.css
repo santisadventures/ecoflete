@@ -163,7 +163,7 @@
   }
 
   .site-header .nav-toggle::before {
-    content: "☰";
+    content: "MENÚ";
     display: block;
     font-size: 1.8rem;
     font-weight: 300;

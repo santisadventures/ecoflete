@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           : "Publicar una solicitud de viaje";
 
         const formUrl = isCarrier
-          ? EcoFleteConfig.forms.offer
-          : EcoFleteConfig.forms.request;
+          ? window.ECOFLETE_CONFIG.OFFER_FREIGHT_FORM_URL
+          : window.ECOFLETE_CONFIG.REQUEST_FREIGHT_FORM_URL;
 
         featuredFormLink.href = formUrl;
       }

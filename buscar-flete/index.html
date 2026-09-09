@@ -108,6 +108,27 @@
                 >
               </label>
 
+              <label class="form-field">
+                <span>Localidad base *</span>
+                <input
+                  type="text"
+                  name="localidad_base"
+                  placeholder="Ej. Chascomús, Buenos Aires"
+                  required
+                >
+              </label>
+
+              <label class="form-field">
+                <span>Actividad / producción *</span>
+                <input
+                  type="text"
+                  name="actividad_produccion"
+                  placeholder="Ej. Ganadería, agricultura, tambo..."
+                  maxlength="150"
+                  required
+                >
+              </label>
+
             </div>
           </fieldset>
 
@@ -390,6 +411,8 @@
           nombre: form.elements.nombre.value.trim(),
           whatsapp: form.elements.whatsapp.value.trim(),
           email: form.elements.email.value.trim(),
+          localidadBase: form.elements.localidad_base.value.trim(),
+          actividadProduccion: form.elements.actividad_produccion.value.trim(),
           origen: form.elements.origen.value.trim(),
           destino: form.elements.destino.value.trim(),
           fecha: form.elements.fecha.value,

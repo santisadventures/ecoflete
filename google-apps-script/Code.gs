@@ -60,7 +60,9 @@ const ECOFLETE = {
     REQUEST_AMOUNT: "Peso / volumen / cantidad",
     REQUEST_BUDGET: "Presupuesto estimado para el traslado",
     REQUEST_DETAILS: "Comentarios adicionales",
-    REQUEST_PHOTO: "Foto del producto o carga a transportar"
+    REQUEST_PHOTO: "Foto del producto o carga a transportar",
+    PRODUCER_BASE_LOCATION: "¿Dónde está ubicado tu establecimiento o actividad?",
+    PRODUCER_ACTIVITY: "¿Cuál es tu actividad o producción principal?"
   }
 };
 
@@ -309,6 +311,8 @@ function ensureProducerColumns_(spreadsheet) {
     "TELEFONO_CLAVE",
     "NOMBRE",
     "WHATSAPP",
+    "LOCALIDAD_BASE",
+    "ACTIVIDAD/PRODUCCION",
     "FECHA_ALTA",
     "ULTIMA_ACTUALIZACION",
     "ACTIVO"
@@ -360,6 +364,8 @@ function createProducer_(sheet, table, response, phoneKey) {
     TELEFONO_CLAVE: phoneKey,
     NOMBRE: response[ECOFLETE.QUESTIONS.NAME],
     WHATSAPP: response[ECOFLETE.QUESTIONS.WHATSAPP],
+    LOCALIDAD_BASE: response[ECOFLETE.QUESTIONS.PRODUCER_BASE_LOCATION],
+    "ACTIVIDAD/PRODUCCION": response[ECOFLETE.QUESTIONS.PRODUCER_ACTIVITY],
     FECHA_ALTA: new Date(),
     ULTIMA_ACTUALIZACION: new Date(),
     ACTIVO: ECOFLETE.YES
@@ -372,6 +378,8 @@ function updateProducer_(sheet, table, entry, response) {
   updateRowByHeaders_(sheet, table, entry.rowNumber, {
     NOMBRE: response[ECOFLETE.QUESTIONS.NAME],
     WHATSAPP: response[ECOFLETE.QUESTIONS.WHATSAPP],
+    LOCALIDAD_BASE: response[ECOFLETE.QUESTIONS.PRODUCER_BASE_LOCATION],
+    "ACTIVIDAD/PRODUCCION": response[ECOFLETE.QUESTIONS.PRODUCER_ACTIVITY],
     ULTIMA_ACTUALIZACION: new Date(),
     ACTIVO: ECOFLETE.YES
   });
@@ -1175,6 +1183,12 @@ function procesarSolicitudBuscarFlete_(payload) {
     response[ECOFLETE.QUESTIONS.NAME] = payload.nombre || "";
     response[ECOFLETE.QUESTIONS.WHATSAPP] = payload.whatsapp || "";
 
+    response[ECOFLETE.QUESTIONS.PRODUCER_BASE_LOCATION] =
+      payload.localidadBase || "";
+
+    response[ECOFLETE.QUESTIONS.PRODUCER_ACTIVITY] =
+      payload.actividadProduccion || "";
+
     response[ECOFLETE.QUESTIONS.REQUEST_ORIGIN] =
       payload.origen || "";
 
@@ -1280,6 +1294,8 @@ function validarSolicitudBuscarFlete_(payload) {
   const required = [
     ["nombre", "Nombre y apellido"],
     ["whatsapp", "WhatsApp"],
+    ["localidadBase", "Localidad base"],
+    ["actividadProduccion", "Actividad / producción"],
     ["origen", "Origen"],
     ["destino", "Destino"],
     ["fecha", "Fecha estimada"],
